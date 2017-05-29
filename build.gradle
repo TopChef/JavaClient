@@ -6,8 +6,10 @@
  * user guide available at https://docs.gradle.org/3.5/userguide/tutorial_java_projects.html
  */
 
-// Apply the java plugin to add support for Java
-apply plugin: 'java'
+plugins {
+    id "java"
+    id "jacoco"
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -17,13 +19,20 @@ repositories {
     mavenCentral()
 }
 
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.22'
 
+    // Provide an implementation for logging with Logback
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.10'
+
     // The production code uses the Jackson library to parse and marshall JSON
     compile 'org.code-house:jackson:2.8.7'
+
+    // JetBrains Annotations
+    compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
@@ -33,4 +42,27 @@ dependencies {
 
     // Add the JUnit-QuickCheck library because this library is awesome
     testCompile 'com.pholser:junit-quickcheck:0.7'
+
+    // Quickcheck also needs some generators to create data types
+    testCompile group: 'com.pholser', name: 'junit-quickcheck-generators',
+            version: '0.7'
 }
+
+// Jacoco stuff, formulates nice coverage reports
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled true
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/main')
+        })
+    }
+}
+
+check.dependsOn jacocoTestReport
+
