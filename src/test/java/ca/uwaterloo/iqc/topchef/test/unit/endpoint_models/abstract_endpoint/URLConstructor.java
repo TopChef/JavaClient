@@ -1,19 +1,18 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoint_models.abstract_endpoint;
 
 import ca.uwaterloo.iqc.topchef.endpoint_models.Endpoint;
-import ca.uwaterloo.iqc.topchef.test.unit.endpoint_models.abstract_endpoint.AbstractAbstractEndpointTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URL;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoint_models.AbstractEndpoint#AbstractEndpoint(URL)}
+ * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoint_models.AbstractEndpoint#AbstractEndpoint(ca.uwaterloo.iqc.topchef.adapters.java.net.URL)}
  */
 public final class URLConstructor extends AbstractAbstractEndpointTestCase {
     private static final Logger log = LoggerFactory.getLogger(URLConstructor.class);
