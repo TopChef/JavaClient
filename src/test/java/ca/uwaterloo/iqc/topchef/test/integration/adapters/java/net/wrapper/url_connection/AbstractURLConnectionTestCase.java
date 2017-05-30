@@ -6,11 +6,20 @@ import ca.uwaterloo.iqc.topchef.test.integration.adapters.java.net.wrapper.Abstr
 import org.junit.Before;
 
 /**
- * Base class for unit tests of {@link ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URLConnection}
+ * Base class for integration tests of {@link ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URLConnection}
  */
 public abstract class AbstractURLConnectionTestCase extends AbstractWrapperTestCase {
+    /**
+     * The good connection. In order for this test to pass, it is assumed that this connection is possible.
+     */
     protected URLConnection connection;
 
+    /**
+     * Open the connection prior to testing business logic in the
+     * {@link ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URLConnection}
+     *
+     * @throws RuntimeException If the connection cannot be opened for whatever reason
+     */
     @Before
     public void setConnection() throws RuntimeException {
         try {
