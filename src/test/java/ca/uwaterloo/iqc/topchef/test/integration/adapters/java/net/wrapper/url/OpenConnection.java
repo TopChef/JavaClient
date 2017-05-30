@@ -15,8 +15,16 @@ import static org.junit.Assert.fail;
  * Tests that a connection successfully opens to a working URL
  */
 public final class OpenConnection extends AbstractURLTestCase {
+    /**
+     * A URL that should work
+     */
     private URL goodURL;
 
+    /**
+     * Set the URL to a good value
+     *
+     * @throws RuntimeException If the URL is malformed.
+     */
     @Before
     public void setGoodURL() throws RuntimeException {
         try {
@@ -26,6 +34,9 @@ public final class OpenConnection extends AbstractURLTestCase {
         }
     }
 
+    /**
+     * Test that a connection can be opened.
+     */
     @Test
     public void openConnectionGoodURL(){
         try {

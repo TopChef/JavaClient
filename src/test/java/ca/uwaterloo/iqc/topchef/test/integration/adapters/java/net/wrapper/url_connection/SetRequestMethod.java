@@ -12,26 +12,43 @@ import static org.junit.Assert.fail;
  */
 public final class SetRequestMethod extends AbstractURLConnectionTestCase {
 
+    /**
+     * Run the test for a GET request
+     */
     @Test
     public void setMethodToGet(){
         testSetMethod(HTTPRequestMethod.GET);
     }
 
+    /**
+     * Run the test for a POST request
+     */
     @Test
     public void setMethodPost(){
         testSetMethod(HTTPRequestMethod.POST);
     }
 
+    /**
+     * Run the setter for a PATCH request
+     */
     @Test
     public void setMethodPatch(){
         testSetMethod(HTTPRequestMethod.PATCH);
     }
 
+    /**
+     * Run the test for a PUT request
+     */
     @Test
     public void setMethodPut(){
         testSetMethod(HTTPRequestMethod.PUT);
     }
 
+    /**
+     * If setting the method fails, fail the test
+     *
+     * @param method The method to set
+     */
     private void testSetMethod(HTTPRequestMethod method){
         try {
             connection.setRequestMethod(method);

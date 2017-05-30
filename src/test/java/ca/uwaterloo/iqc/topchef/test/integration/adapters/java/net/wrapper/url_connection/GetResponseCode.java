@@ -16,6 +16,9 @@ import static org.junit.Assert.fail;
  * Contains unit tests for {@link URLConnection#getResponseCode()}
  */
 public final class GetResponseCode extends AbstractURLConnectionTestCase {
+    /**
+     * Set the method to a GET request. If it doesn't work, then fail the test.
+     */
     @Before
     public void setUp(){
         try {
@@ -25,6 +28,9 @@ public final class GetResponseCode extends AbstractURLConnectionTestCase {
         }
     }
 
+    /**
+     * Tests that running a good connection returns the proper status code.
+     */
     @Test
     public void testGoodStatusCode(){
         try {
