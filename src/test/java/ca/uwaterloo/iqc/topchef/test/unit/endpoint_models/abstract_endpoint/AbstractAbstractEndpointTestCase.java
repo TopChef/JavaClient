@@ -1,7 +1,7 @@
-package ca.uwaterloo.iqc.topchef.unit.endpoint_models.abstract_endpoint;
+package ca.uwaterloo.iqc.topchef.test.unit.endpoint_models.abstract_endpoint;
 
+import ca.uwaterloo.iqc.topchef.test.unit.endpoint_models.AbstractEndpointModelsTestCase;
 import ca.uwaterloo.iqc.topchef.endpoint_models.AbstractEndpoint;
-import ca.uwaterloo.iqc.topchef.unit.endpoint_models.AbstractEndpointModelsTestCase;
 
 import java.net.MalformedURLException;
 import java.net.URL;

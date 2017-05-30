@@ -11,6 +11,11 @@ plugins {
     id "jacoco"
 }
 
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -61,6 +66,16 @@ jacocoTestReport {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: '**/main')
         })
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                "Implementation-Title": "TopChef-Client",
+                "Implementation-Version": 0.1,
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
     }
 }
 
