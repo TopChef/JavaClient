@@ -13,7 +13,7 @@ public abstract class AbstractAbstractEndpointTestCase extends AbstractEndpointM
     /**
      * Provides a concrete endpoint to test things
      */
-    protected class ConcreteEndpoint extends AbstractEndpoint {
+    protected static final class ConcreteEndpoint extends AbstractEndpoint {
         /**
          *
          * @param url The desired URL
