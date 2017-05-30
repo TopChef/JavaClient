@@ -6,10 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.ProtocolException;
+import java.util.Optional;
+import java.util.function.Consumer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Contains integration tests for
@@ -36,9 +36,9 @@ public final class GetRequestMethod extends AbstractURLConnectionTestCase {
     @Test
     public void testPatch(){
         testMethod(HTTPRequestMethod.PATCH);
-        assertEquals(
-                "PATCH", connection.getRequestProperty("X-HTTP-Method-Override")
-        );
+        Optional<String> headerValue = connection.getRequestProperty(METHOD_OVERRIDE_HEADER_NAME);
+        assertTrue(headerValue.isPresent());
+        headerValue.ifPresent(new EqualMatcher("PATCH"));
     }
 
     @Test
@@ -62,5 +62,18 @@ public final class GetRequestMethod extends AbstractURLConnectionTestCase {
         }
 
         assertEquals(method, connection.getRequestMethod());
+    }
+
+    private static class EqualMatcher implements Consumer<String> {
+        private final String expectedValue;
+
+        public EqualMatcher(String expectedValue){
+            this.expectedValue = expectedValue;
+        }
+
+        @Override
+        public void accept(String input){
+            assertEquals(expectedValue, input);
+        }
     }
 }

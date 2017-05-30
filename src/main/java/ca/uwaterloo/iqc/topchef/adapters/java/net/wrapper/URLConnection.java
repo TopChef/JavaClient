@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Wraps {@link java.net.HttpURLConnection} as a URL connection. I doubt we'll be connecting to other jars via
@@ -88,7 +89,14 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
         }
     }
 
+    /**
+     *
+     * @return The appropriate response code for the request. If no code was found, returns the
+     * {@link HTTPResponseCode#INTERNAL_SERVER_ERROR} code
+     * @throws IOException if the underlying connection is unable to receive the return code
+     */
     @Override
+    @NotNull
     public HTTPResponseCode getResponseCode() throws IOException {
         Integer response = this.connection.getResponseCode();
 
@@ -114,25 +122,64 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
         }
     }
 
-    @NotNull
+    /**
+     *
+     * @param key The key for the header
+     * @return The value of the header.
+     */
     @Override
+    @NotNull
     public Optional<String> getRequestProperty(String key){
         return Optional.ofNullable(this.connection.getRequestProperty(key));
     }
 
+    /**
+     *
+     * @throws IllegalStateException If the {@link ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection} has
+     * already connected
+     * @throws IOException If the connection cannot be done
+     */
     @Override
     public void connect() throws IllegalStateException, IOException {
         this.connection.connect();
     }
 
+    /**
+     * Close the connection
+     */
     @Override
     public void disconnect(){
         this.connection.disconnect();
     }
 
+    /**
+     *
+     * Checks if this is a PATCH request by looking for a method override header set to PATCH
+     *
+     * @param connection The connection to check for being a patch method
+     * @return {@link Boolean#TRUE} if the connection is a PATCH request, otherwise {@link Boolean#FALSE}
+     */
     @NotNull
     @Contract(pure = true)
     private static Boolean isPatchMethod(HttpURLConnection connection){
-        return connection.getRequestProperty(METHOD_OVERRIDE_HEADER_NAME).equals("PATCH");
+        Optional<String> value = Optional.ofNullable(connection.getRequestProperty(METHOD_OVERRIDE_HEADER_NAME));
+        return value.map(new IsPatchMethod()).orElse(Boolean.FALSE);
+    }
+
+    /**
+     * Matcher to determine whether the value of the method override header is PATCH
+     */
+    private static final class IsPatchMethod implements Function<String, Boolean> {
+        /**
+         *
+         * @param value The value of the header to check
+         * @return {@link Boolean#TRUE} if the value is "PATCH", else {@link Boolean#FALSE}.
+         */
+        @NotNull
+        @Contract(pure = true)
+        @Override
+        public Boolean apply(String value){
+            return value.equals("PATCH");
+        }
     }
 }
