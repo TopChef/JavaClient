@@ -1,7 +1,9 @@
 package ca.uwaterloo.iqc.topchef.endpoint_models;
 
-import java.net.ProtocolException;
-import java.net.URL;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
+
+import java.io.IOException;
 
 /**
  * Describes the contract for an HTTP endpoint
@@ -18,5 +20,5 @@ public interface Endpoint {
      *
      * @return True if the endpoint is up, and False if not
      */
-    Boolean isEndpointUp() throws ProtocolException;
+    Boolean isEndpointUp() throws IOException, HTTPConnectionCastException;
 }

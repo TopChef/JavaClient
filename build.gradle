@@ -51,6 +51,9 @@ dependencies {
     // Quickcheck also needs some generators to create data types
     testCompile group: 'com.pholser', name: 'junit-quickcheck-generators',
             version: '0.7'
+
+    // JMock provides mock objects for unit testing fun
+    testCompile group: 'org.jmock', name: 'jmock', version: '2.5.1'
 }
 
 // Jacoco stuff, formulates nice coverage reports
