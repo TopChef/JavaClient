@@ -33,6 +33,9 @@ before_install:
 before_script:
     - chmod +x gradlew
 
+test:
+    - gradle test --stacktrace
+
 after_success:
     - codecov
 
