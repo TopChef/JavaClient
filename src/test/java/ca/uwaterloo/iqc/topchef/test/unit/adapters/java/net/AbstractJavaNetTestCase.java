@@ -4,6 +4,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.test.unit.adapters.AbstractAdaptersTestCase;
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
+import com.pholser.junit.quickcheck.generator.java.lang.AbstractStringGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -92,10 +93,12 @@ public abstract class AbstractJavaNetTestCase extends AbstractAdaptersTestCase {
     }
 
     public static final class AppendedURLGenerator extends TestParametersGenerator {
+        private static final AbstractStringGenerator stringGenerator = new WebSafeStringGenerator();
+
         @NotNull
         @Override
         protected String getAppendedText(SourceOfRandomness rng, GenerationStatus status){
-            return randomString(rng, status);
+            return stringGenerator.generate(rng, status);
         }
 
         @NotNull

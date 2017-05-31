@@ -33,7 +33,7 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
      * because, depending on the value of the integer, some special characters are picked. This can be done better
      *
      */
-    protected static final class WebSafeStringGenerator extends AbstractStringGenerator {
+    public static final class WebSafeStringGenerator extends AbstractStringGenerator {
         /**
          * Returns a random web-safe character for concatenation into a string
          * @param random The random number generator to ues for making the character
@@ -85,7 +85,7 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
     /**
      * Generates web-safe strings formatted into URLs
      */
-    protected static final class URLStringGenerator extends Generator<String> {
+    public static final class URLStringGenerator extends Generator<String> {
         /**
          * The web-safe string generator to make strings
          */
