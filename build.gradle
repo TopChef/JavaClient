@@ -34,7 +34,11 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.10'
 
     // The production code uses the Jackson library to parse and marshall JSON
-    compile 'org.code-house:jackson:2.8.7'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.8'
+
+    // Jackson needs some data classes to do its thing, so we'll put in lombok to
+    // avoid writing trivial getters and setters
+    compileOnly "org.projectlombok:lombok:1.16.16"
 
     // JetBrains Annotations
     compile group: 'org.jetbrains', name: 'annotations', version: '13.0'

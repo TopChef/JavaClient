@@ -2,12 +2,16 @@ package ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Wraps the URL implementation in {@link java.net.URL}
@@ -23,6 +27,11 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
      * instance.
      */
     private final java.net.URL wrappedURL;
+
+    /**
+     * The regex forwardSlashRegex for a URL starting with a '/'. This is stripped from the URL
+     */
+    private static final Pattern forwardSlashRegex = Pattern.compile("(?<=\\/).*$");
 
     /**
      *
@@ -57,6 +66,29 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
         return new ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URLConnection(http_connection);
     }
 
+    @Contract("_ -> !null")
+    @Override
+    public ca.uwaterloo.iqc.topchef.adapters.java.net.URL getRelativeURL(String path) throws MalformedURLException {
+        return new URL(String.format(
+                "%s://%s:%s/%s",
+                this.wrappedURL.getProtocol(), this.wrappedURL.getHost(),
+                this.wrappedURL.getPort(), stripForwardSlash(path)
+                ));
+    }
+
+    @Override
+    @Contract(pure = true)
+    public int compareTo(@NotNull ca.uwaterloo.iqc.topchef.adapters.java.net.URL otherURL){
+        return this.toString().compareTo(otherURL.toString());
+    }
+
+    @NotNull
+    @Override
+    @Contract(pure = true)
+    public String toString(){
+        return this.wrappedURL.toString();
+    }
+
     /**
      *
      * @param connection The connection to cast
@@ -70,6 +102,15 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
         } catch (ClassCastException error){
             log.error("Unable to cast HTTP Connection", error);
             throw new HTTPConnectionCastException(error);
+        }
+    }
+
+    private static String stripForwardSlash(String path){
+        Matcher match = forwardSlashRegex.matcher(path);
+        if (match.find()) {
+            return match.group(0);
+        } else {
+            return path;
         }
     }
 }
