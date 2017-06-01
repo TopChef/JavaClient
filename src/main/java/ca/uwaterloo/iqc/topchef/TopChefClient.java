@@ -16,8 +16,17 @@ public class TopChefClient implements Client {
         this.url = url;
     }
 
+    public TopChefClient(java.net.URL url){
+        this.url = new ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URL(url);
+    }
+
     public TopChefClient(String url) throws MalformedURLException {
         this.url = new ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URL(url);
+    }
+
+    @Override
+    public URL getURL(){
+        return this.url;
     }
 
     @Override

@@ -21,6 +21,11 @@ public class Resolver implements URLResolver {
         this.baseURL = baseURL;
     }
 
+    @Override
+    public URL getBaseURL(){
+        return baseURL;
+    }
+
     /**
      *
      * @return The URL for the API's JSON schema validator relative to the base URL
