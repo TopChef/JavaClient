@@ -8,6 +8,8 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,6 +19,8 @@ import java.io.OutputStreamWriter;
  * Endpoint for validating URLs
  */
 public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
+    private static final Logger log = LoggerFactory.getLogger(JSONSchemaValidator.class);
+
     public JSONSchemaValidator(URL url){
         super(url);
     }
@@ -29,12 +33,14 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
     public Boolean validate(JSONAware instance, JSONAware schema) throws IOException, RuntimeException {
         URLConnection connection = openConnection();
 
-        JSONObject dataToSend = getDataToSend(instance, schema);
+        String dataToSend = getDataToSend(instance, schema).toJSONString();
 
         OutputStream stream = connection.getOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(stream);
 
-        writer.write(dataToSend.toJSONString());
+        log.debug(String.format("Writing data %s to request", dataToSend));
+
+        writer.write(dataToSend);
         writer.close();
 
         HTTPResponseCode code = connection.getResponseCode();
@@ -54,8 +60,8 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
 
     private static JSONObject getDataToSend(JSONAware instance, JSONAware schema){
         JSONObject data = new JSONObject();
-        data.put("object", instance.toJSONString());
-        data.put("schema", schema.toJSONString());
+        data.put("object", instance);
+        data.put("schema", schema);
 
         return data;
     }
@@ -75,6 +81,8 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
         } catch (HTTPConnectionCastException error) {
             throw new RuntimeException(error);
         }
+
+        connection.setDoOutput(true);
         connection.setRequestMethod(HTTPRequestMethod.POST);
         connection.setRequestProperty("Content-Type", "application/json");
         return connection;

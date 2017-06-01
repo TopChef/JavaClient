@@ -1,6 +1,8 @@
 package ca.uwaterloo.iqc.topchef;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
+import ca.uwaterloo.iqc.topchef.endpoint_models.JSONSchemaValidator;
+import ca.uwaterloo.iqc.topchef.endpoint_models.Validator;
 import ca.uwaterloo.iqc.topchef.url_resolver.Resolver;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 
@@ -32,5 +34,10 @@ public class TopChefClient implements Client {
     @Override
     public URLResolver getURLResolver(){
         return new Resolver(this.url);
+    }
+
+    @Override
+    public Validator getJSONSchemaValidator(){
+        return new JSONSchemaValidator(this);
     }
 }

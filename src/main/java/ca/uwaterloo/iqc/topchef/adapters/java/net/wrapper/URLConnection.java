@@ -169,6 +169,17 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
         return this.connection.getOutputStream();
     }
 
+    @NotNull
+    @Override
+    public Boolean getDoOutput(){
+        return this.connection.getDoOutput();
+    }
+
+    @Override
+    public void setDoOutput(Boolean doOutput){
+        this.connection.setDoOutput(doOutput);
+    }
+
     /**
      *
      * Checks if this is a PATCH request by looking for a method override header set to PATCH

@@ -48,6 +48,10 @@ public interface URLConnection {
 
     OutputStream getOutputStream() throws IOException;
 
+    Boolean getDoOutput();
+
+    void setDoOutput(Boolean doOutput);
+
     /**
      * Establish the connection to another server
      *

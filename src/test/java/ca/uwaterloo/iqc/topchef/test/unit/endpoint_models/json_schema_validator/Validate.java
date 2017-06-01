@@ -101,6 +101,8 @@ public final class Validate extends AbstractJSONSchemaValidatorTestCase {
 
             oneOf(schema).toJSONString();
             oneOf(instance).toJSONString();
+
+            oneOf(connection).setDoOutput(Boolean.TRUE);
         }
 
         protected abstract HTTPResponseCode getResponseCode();
