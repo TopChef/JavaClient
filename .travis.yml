@@ -33,6 +33,10 @@ before_install:
 before_script:
     - chmod +x gradlew
 
+script:
+    # Run only the unit tests
+    - gradle test --tests *unit*
+
 after_success:
     - codecov
 
