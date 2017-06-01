@@ -44,12 +44,30 @@ public interface URLConnection {
 
     void setRequestProperty(@NotNull String key, String value);
 
+    /**
+     *
+     * @return A stream that can be used to read the request body
+     * @throws IOException If the stream cannot be retrieved
+     */
     InputStream getInputStream() throws IOException;
 
+    /**
+     *
+     * @return A stream that can be used to write to the request body
+     * @throws IOException If the stream cannot be retrieved
+     */
     OutputStream getOutputStream() throws IOException;
 
+    /**
+     *
+     * @return Whether output is allowed on this connection.
+     */
     Boolean getDoOutput();
 
+    /**
+     *
+     * @param doOutput Whether output to this connection should be allowed or not.
+     */
     void setDoOutput(Boolean doOutput);
 
     /**

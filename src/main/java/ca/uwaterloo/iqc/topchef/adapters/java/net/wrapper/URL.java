@@ -29,7 +29,7 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
     private final java.net.URL wrappedURL;
 
     /**
-     * The regex forwardSlashRegex for a URL starting with a '/'. This is stripped from the URL
+     * The regex for a URL starting with a '/'. This is used to strip the forward slash from the URL.
      */
     private static final Pattern forwardSlashRegex = Pattern.compile("(?<=\\/).*$");
 
@@ -60,12 +60,16 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
     @Override
     public URLConnection openConnection() throws IOException, HTTPConnectionCastException {
         java.net.URLConnection connection = this.wrappedURL.openConnection();
-
         HttpURLConnection http_connection = castToHTTPConnection(connection);
-
         return new ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URLConnection(http_connection);
     }
 
+    /**
+     *
+     * @param path The text to append to the URL
+     * @return The appended URL
+     * @throws MalformedURLException if the appended URL is not a URL
+     */
     @Contract("_ -> !null")
     @Override
     public ca.uwaterloo.iqc.topchef.adapters.java.net.URL getRelativeURL(String path) throws MalformedURLException {
@@ -76,12 +80,21 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
                 ));
     }
 
+    /**
+     * Check for equality between two URLs. Two URLs are equal if they point to the same resource
+     * @param otherURL The URL to compare to
+     * @return the result of the comparison function of the URLs as a string
+     */
     @Override
     @Contract(pure = true)
     public int compareTo(@NotNull ca.uwaterloo.iqc.topchef.adapters.java.net.URL otherURL){
         return this.toString().compareTo(otherURL.toString());
     }
 
+    /**
+     *
+     * @return The string representation of this URL
+     */
     @NotNull
     @Override
     @Contract(pure = true)
@@ -105,6 +118,11 @@ public final class URL implements ca.uwaterloo.iqc.topchef.adapters.java.net.URL
         }
     }
 
+    /**
+     * If the appended text started with a forward slash, remove it
+     * @param path The text for which the slash is removed
+     * @return The modified string
+     */
     private static String stripForwardSlash(String path){
         Matcher match = forwardSlashRegex.matcher(path);
         if (match.find()) {

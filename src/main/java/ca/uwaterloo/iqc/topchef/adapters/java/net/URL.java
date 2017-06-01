@@ -16,8 +16,18 @@ public interface URL extends Comparable<URL> {
      */
     URLConnection openConnection() throws IOException, HTTPConnectionCastException;
 
+    /**
+     *
+     * @param path The text to append to the URL
+     * @return A URL with the path appended to ut
+     * @throws MalformedURLException If the appended string will not form a URL
+     */
     URL getRelativeURL(String path) throws MalformedURLException;
 
+    /**
+     *
+     * @return A string representation of this URL
+     */
     @Contract(pure = true)
     @NotNull
     String toString();
