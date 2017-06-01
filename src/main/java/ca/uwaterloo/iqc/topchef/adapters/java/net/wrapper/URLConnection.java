@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.Optional;
@@ -133,6 +135,11 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
         return Optional.ofNullable(this.connection.getRequestProperty(key));
     }
 
+    @Override
+    public void setRequestProperty(@NotNull String key, String value){
+        this.connection.setRequestProperty(key, value);
+    }
+
     /**
      *
      * @throws IllegalStateException If the {@link ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection} has
@@ -150,6 +157,16 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
     @Override
     public void disconnect(){
         this.connection.disconnect();
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return this.connection.getInputStream();
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return this.connection.getOutputStream();
     }
 
     /**

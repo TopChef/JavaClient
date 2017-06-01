@@ -1,6 +1,10 @@
 package ca.uwaterloo.iqc.topchef.adapters.java.net;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ProtocolException;
 import java.util.Optional;
 
@@ -30,13 +34,19 @@ public interface URLConnection {
 
     /**
      * Return the value of the header. Since this value might not be defined,
-     * it is wrapped conveniently in an {@link Optional
+     * it is wrapped conveniently in an {@link Optional}
      *
      * @param key The key of the property
      * @return The value to which the desired attribute is set
      *
      */
     Optional<String> getRequestProperty(String key);
+
+    void setRequestProperty(@NotNull String key, String value);
+
+    InputStream getInputStream() throws IOException;
+
+    OutputStream getOutputStream() throws IOException;
 
     /**
      * Establish the connection to another server
