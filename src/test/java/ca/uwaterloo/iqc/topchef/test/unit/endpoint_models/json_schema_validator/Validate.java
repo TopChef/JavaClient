@@ -7,6 +7,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoint_models.JSONSchemaValidator;
 import ca.uwaterloo.iqc.topchef.endpoint_models.Validator;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
+import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
 import org.jetbrains.annotations.Contract;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -69,7 +70,7 @@ public final class Validate extends AbstractJSONSchemaValidatorTestCase {
         context.assertIsSatisfied();
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = UnexpectedResponseCodeException.class)
     public void errorRequestTest() throws Exception {
         context.checking(new ExpectationsForErrorResult());
 
