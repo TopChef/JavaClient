@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.util.Optional;
@@ -134,6 +136,17 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
     }
 
     /**
+     * Modify the request headers
+     *
+     * @param key The key to modify
+     * @param value The new value of the key
+     */
+    @Override
+    public void setRequestProperty(@NotNull String key, String value){
+        this.connection.setRequestProperty(key, value);
+    }
+
+    /**
      *
      * @throws IllegalStateException If the {@link ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection} has
      * already connected
@@ -150,6 +163,46 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
     @Override
     public void disconnect(){
         this.connection.disconnect();
+    }
+
+    /**
+     *
+     * @return A stream that can be used to read the request body
+     * @throws IOException if the stream cannot be retrieved
+     */
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return this.connection.getInputStream();
+    }
+
+    /**
+     *
+     * @return A stream that can be used to write data to the connection
+     * @throws IOException If the stream cannot be retrieved
+     */
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return this.connection.getOutputStream();
+    }
+
+    /**
+     *
+     * @return A variable that is {@link Boolean#TRUE } if output to this connection is allowed, and
+     * {@link Boolean#FALSE} if not.
+     */
+    @NotNull
+    @Override
+    public Boolean getDoOutput(){
+        return this.connection.getDoOutput();
+    }
+
+    /**
+     *
+     * @param doOutput {@link Boolean#TRUE} if output should be allowed
+     */
+    @Override
+    public void setDoOutput(Boolean doOutput){
+        this.connection.setDoOutput(doOutput);
     }
 
     /**

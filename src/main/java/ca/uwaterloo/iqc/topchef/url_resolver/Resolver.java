@@ -21,6 +21,10 @@ public class Resolver implements URLResolver {
         this.baseURL = baseURL;
     }
 
+    /**
+     *
+     * @return The base URL of the resolver
+     */
     @Override
     public URL getBaseURL(){
         return baseURL;
