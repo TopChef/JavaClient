@@ -9,6 +9,8 @@ import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,8 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
      * The log to which runtime messages are written
      */
     private static final Logger log = LoggerFactory.getLogger(JSONSchemaValidator.class);
+
+    private static final JSONParser parser = new JSONParser();
 
     /**
      *
@@ -67,10 +71,12 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
      * @return {@link Boolean#TRUE} if the instance matches the schema, otherwise {@link Boolean#FALSE}
      * @throws IOException If I/O cannot be established with the TopChef API
      * @throws UnexpectedResponseCodeException if the response code is not {@link HTTPResponseCode#OK} and
+     * @throws ParseException If the data sent into this method is not valid JSON
      * {@link HTTPResponseCode#BAD_REQUEST}
      */
     @Override
-    public Boolean validate(String instance, String schema) throws IOException, UnexpectedResponseCodeException {
+    public Boolean validate(String instance, String schema) throws IOException, UnexpectedResponseCodeException,
+            ParseException {
         URLConnection connection = openConnection();
         String dataToSend = getDataToSend(instance, schema).toJSONString();
         HTTPResponseCode code = getResponseCode(connection, dataToSend);
@@ -162,10 +168,13 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
      * @return The request formatted as JSON
      */
     @SuppressWarnings("unchecked")
-    private static JSONObject getDataToSend(String instance, String schema){
+    private static JSONObject getDataToSend(String instance, String schema) throws ParseException {
+        JSONObject instanceJSON = (JSONObject) parser.parse(instance);
+        JSONObject schemaJSON = (JSONObject) parser.parse(schema);
+
         JSONObject data = new JSONObject();
-        data.put("object", instance);
-        data.put("schema", schema);
+        data.put("object", instanceJSON);
+        data.put("schema", schemaJSON);
 
         return data;
     }
