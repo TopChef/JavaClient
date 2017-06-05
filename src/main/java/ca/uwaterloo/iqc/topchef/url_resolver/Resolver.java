@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
+import java.util.UUID;
 
 /**
  * An implementation of the {@link URLResolver}, used to match URLs in the API.
@@ -43,5 +44,30 @@ public class Resolver implements URLResolver {
             log.error("Joining URLs threw unexpected exception", error);
             throw new RuntimeException(error);
         }
+    }
+
+    @Override
+    public URL getServicesEndpoint() throws RuntimeException {
+        try {
+            return this.baseURL.getRelativeURL("/services");
+        } catch (MalformedURLException error) {
+            log.error("Joining URLs threw unexpected exception", error);
+            throw new RuntimeException(error);
+        }
+    }
+
+    @Override
+    public URL getServiceEndpoint(UUID service) throws RuntimeException {
+        try {
+            return this.baseURL.getRelativeURL(String.format("/services/%s", service.toString()));
+        } catch (MalformedURLException error) {
+            log.error("Joining URLs threw unexpected exception", error);
+            throw new RuntimeException(error);
+        }
+    }
+
+    @Override
+    public URL getServiceEndpoint(String service) throws RuntimeException {
+        return this.getServiceEndpoint(UUID.fromString(service));
     }
 }

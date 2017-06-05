@@ -48,6 +48,9 @@ dependencies {
     // Add the JUnit-QuickCheck library because this library is awesome
     testCompile 'com.pholser:junit-quickcheck:0.7'
 
+    // Enter the third generation of unit testing frameworks with hamcrest
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+
     // Quickcheck also needs some generators to create data types
     testCompile group: 'com.pholser', name: 'junit-quickcheck-generators',
             version: '0.7'
