@@ -25,6 +25,13 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+//create a single Jar with all dependencies
+task fatJar(type: Jar, description: "Compile the main classes and all dependencies into a single jar") {
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
