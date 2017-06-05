@@ -15,6 +15,9 @@ public final class Validate extends AbstractJSONSchemaValidatorTestCase {
     private JSONObject instance;
     private JSONObject schema;
 
+    private static final String instanceString = "{}";
+    private static final String schemaString = "{\"type\": \"object\"}";
+
     @Before
     public void createJSONObjects(){
         instance = new JSONObject();
@@ -45,5 +48,10 @@ public final class Validate extends AbstractJSONSchemaValidatorTestCase {
                 "properties",
                 property_schema
         );
+    }
+
+    @Test
+    public void stringValidationTest() throws Exception {
+        assertTrue(this.client.getJSONSchemaValidator().validate(instanceString, schemaString));
     }
 }
