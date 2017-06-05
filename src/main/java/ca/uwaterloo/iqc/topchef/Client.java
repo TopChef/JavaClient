@@ -1,8 +1,8 @@
 package ca.uwaterloo.iqc.topchef;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
-import ca.uwaterloo.iqc.topchef.endpoint_models.Service;
-import ca.uwaterloo.iqc.topchef.endpoint_models.Validator;
+import ca.uwaterloo.iqc.topchef.endpoints.Service;
+import ca.uwaterloo.iqc.topchef.endpoints.Validator;
 import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 
