@@ -1,13 +1,13 @@
 package ca.uwaterloo.iqc.topchef.test.integration.adapters.java.net.wrapper.url_connection;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
+import com.github.dmstocking.optional.java.util.Optional;
+import com.github.dmstocking.optional.java.util.function.Consumer;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.ProtocolException;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 

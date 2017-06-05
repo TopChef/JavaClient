@@ -2,6 +2,8 @@ package ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
+import com.github.dmstocking.optional.java.util.Optional;
+import com.github.dmstocking.optional.java.util.function.Function;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,8 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Wraps {@link java.net.HttpURLConnection} as a URL connection. I doubt we'll be connecting to other jars via
@@ -40,29 +40,33 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
 
     /**
      * @return The request method that this connection is making
+     * @throws RuntimeException if the HTTP Request Method is not defined in the {@link HTTPRequestMethod} enum
      * @implNote This method will need to be updated if another HTTP method needs to be
      *  added
      */
     @Override
-    public HTTPRequestMethod getRequestMethod(){
+    public HTTPRequestMethod getRequestMethod() throws RuntimeException {
         String method = this.connection.getRequestMethod().toUpperCase();
 
-        switch (method) {
-            case "GET":
-                return HTTPRequestMethod.GET;
-            case "POST":
-                if (isPatchMethod(connection)) {
-                    return HTTPRequestMethod.PATCH;
-                } else {
-                    return HTTPRequestMethod.POST;
-                }
-            case "PUT":
-                return HTTPRequestMethod.PUT;
-            default:
-                throw new RuntimeException(
-                        String.format("Method %s not defined", method)
-                );
+        HTTPRequestMethod parsedMethod;
+
+        if (method.equals("GET")) {
+            parsedMethod = HTTPRequestMethod.GET;
+        } else if (method.equals("PUT")) {
+            parsedMethod = HTTPRequestMethod.PUT;
+        } else if (method.toUpperCase().equals("POST")) {
+            if (isPatchMethod(connection)){
+                parsedMethod = HTTPRequestMethod.PATCH;
+            } else {
+                parsedMethod = HTTPRequestMethod.POST;
+            }
+        } else {
+            throw new RuntimeException(
+                    String.format("Method %s not defined", method)
+            );
         }
+
+        return parsedMethod;
     }
 
     /**
