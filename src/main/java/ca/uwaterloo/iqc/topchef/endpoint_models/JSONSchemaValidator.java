@@ -169,8 +169,16 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
      */
     @SuppressWarnings("unchecked")
     private static JSONObject getDataToSend(String instance, String schema) throws ParseException {
-        JSONObject instanceJSON = (JSONObject) parser.parse(instance);
-        JSONObject schemaJSON = (JSONObject) parser.parse(schema);
+        JSONObject instanceJSON;
+        JSONObject schemaJSON;
+
+        try {
+            instanceJSON = (JSONObject) parser.parse(instance);
+            schemaJSON = (JSONObject) parser.parse(schema);
+        } catch (ClassCastException error){
+            log.error("Attempting to cast the parsed JSON into JSON objects threw error", error);
+            throw new ParseException(ParseException.ERROR_UNEXPECTED_EXCEPTION, error);
+        }
 
         JSONObject data = new JSONObject();
         data.put("object", instanceJSON);
