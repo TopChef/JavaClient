@@ -22,11 +22,15 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
+    // Provide a backport for Java 8-style Optional monads
+    compile 'com.github.dmstocking:support-optional:1.1'
+
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.22'
 

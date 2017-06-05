@@ -1,12 +1,12 @@
 package ca.uwaterloo.iqc.topchef.adapters.java.net;
 
+import com.github.dmstocking.optional.java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ProtocolException;
-import java.util.Optional;
 
 /**
  * Describes the contract for a URL connection
