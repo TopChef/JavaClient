@@ -2,6 +2,8 @@ package ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
+import com.github.dmstocking.optional.java.util.Optional;
+import com.github.dmstocking.optional.java.util.function.Function;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,8 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Wraps {@link java.net.HttpURLConnection} as a URL connection. I doubt we'll be connecting to other jars via
