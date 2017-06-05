@@ -10,9 +10,11 @@ import org.hamcrest.core.IsEqual;
 import org.jetbrains.annotations.Contract;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.lib.concurrent.Synchroniser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,13 +22,13 @@ import org.junit.rules.ExpectedException;
 
 import java.io.ByteArrayOutputStream;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoint_models.JSONSchemaValidator#validate(String, String)}
  */
 public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
+
     /**
      * The instance to be validated
      */
@@ -45,29 +47,29 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
     /**
      * The mocking context
      */
-    private static final Mockery context = new Mockery();
+    private final Mockery context = new SynchronizedContext();
 
     /**
      * The URL to the validator endpoint
      */
-    private static final URL mockURL = context.mock(URL.class);
+    private final URL mockURL = context.mock(URL.class);
 
     /**
      * The connection to the validator
      */
-    private static final URLConnection mockConnection = context.mock(URLConnection.class);
+    private final URLConnection mockConnection = context.mock(URLConnection.class);
 
     /**
      * The output stream that the mock connection returns. The body of the POST request is written to
      * this stream
      */
-    private static final ByteArrayOutputStream mockOutputStream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream mockOutputStream = new ByteArrayOutputStream();
 
     /**
      * A JSON parser used to parse the mock output stream and check that the correct data is sent in
      * the request body
      */
-    private static final JSONParser parser = new JSONParser();
+    private final JSONParser parser = new JSONParser();
 
     /**
      * The validator endpoint
@@ -88,6 +90,11 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
         jsonValidator = new JSONSchemaValidator(mockURL);
     }
 
+    @After
+    public void clearOutputStream(){
+        mockOutputStream.reset();
+    }
+
     /**
      * Tests that a request made along the happy path sends the correct data to the API
      *
@@ -96,9 +103,7 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
     @Test
     public void goodRequest() throws Exception {
         context.checking(new ExpectationsForTrueResult());
-
         assertTrue(jsonValidator.validate(broadestInstance, broadestSchema));
-
         JSONObject dataSent = (JSONObject) parser.parse(mockOutputStream.toString());
 
         assertThat(dataSent.get("object").toString(), IsEqual.equalTo(broadestInstance));
@@ -115,10 +120,12 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
     @Test
     public void requestIsArray() throws Exception {
         context.checking(new ExpectationsForFalseResult());
+
         exceptionGrabber.expect(ParseException.class);
 
         jsonValidator.validate(broadestInstance, arrayJSON);
 
+        context.assertIsSatisfied();
     }
 
     /**
@@ -167,6 +174,12 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
         @Override
         protected HTTPResponseCode getResponseCode(){
             return HTTPResponseCode.OK;
+        }
+    }
+
+    private static final class SynchronizedContext extends Mockery {
+        public SynchronizedContext(){
+            setThreadingPolicy(new Synchroniser());
         }
     }
 
