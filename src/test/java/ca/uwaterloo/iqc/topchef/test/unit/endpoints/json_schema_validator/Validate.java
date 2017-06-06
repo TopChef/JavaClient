@@ -24,15 +24,16 @@ import static org.junit.Assert.assertTrue;
  * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JSONSchemaValidator#validate(JSONAware, JSONAware)}
  */
 public final class Validate extends AbstractJSONSchemaValidatorTestCase {
-    private static final Mockery context = new Mockery();
 
-    private static final JSONAware instance = context.mock(JSONAware.class, "instance");
+    private final Mockery context = new Mockery();
 
-    private static final JSONAware schema = context.mock(JSONAware.class, "schema");
+    private final JSONAware instance = context.mock(JSONAware.class, "instance");
 
-    private static final URLConnection connection = context.mock(URLConnection.class);
+    private final JSONAware schema = context.mock(JSONAware.class, "schema");
 
-    private static final URL url = context.mock(URL.class);
+    private final URLConnection connection = context.mock(URLConnection.class);
+
+    private final URL url = context.mock(URL.class);
 
     private Validator jsonValidator;
 
