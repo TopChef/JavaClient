@@ -6,15 +6,18 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.AbstractImmutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.endpoints.ImmutableJSONEndpoint;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * Contains unit tests for {@link AbstractImmutableJSONEndpoint#getJSON()}
@@ -30,6 +33,9 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
 
     private InputStream mockInputStream;
 
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
+
     @Before
     public void setEndpoint(){
         endpoint = new ConcreteImmutableJSONEndpoint(mockURL);
@@ -44,7 +50,17 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
     public void getJSONHappyPath() throws Exception {
         context.checking(new ExpectationsForGetJSONHappyPath());
 
-        assertTrue(endpoint.getJSON() != null);
+        assertNotNull(endpoint.getJSON());
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void badConnectionAssert() throws Exception {
+        context.checking(new ExpectationsForBadConnection());
+        expectedException.expect(HTTPException.class);
+
+        endpoint.getJSON();
 
         context.assertIsSatisfied();
     }
@@ -57,7 +73,16 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             setExpectationsForConnection();
         }
 
-        private void setExpectationsForConnection() throws Exception {
+        protected abstract void setExpectationsForConnection() throws Exception;
+    }
+
+    private final class ExpectationsForGetJSONHappyPath extends ExpectationsForTest {
+        public ExpectationsForGetJSONHappyPath() throws Exception {
+            super();
+        }
+
+        @Override
+        protected void setExpectationsForConnection() throws Exception {
             oneOf(mockConnection).connect();
             oneOf(mockConnection).setRequestProperty("Content-Type", "application/json");
             oneOf(mockConnection).setRequestMethod(HTTPRequestMethod.GET);
@@ -68,27 +93,34 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             setExpectationsForInputStream();
         }
 
-        protected abstract void setExpectationsForResponseCode() throws Exception;
-
-        protected abstract void setExpectationsForInputStream() throws Exception;
-    }
-
-    private final class ExpectationsForGetJSONHappyPath extends ExpectationsForTest {
-        public ExpectationsForGetJSONHappyPath() throws Exception {
-            super();
-        }
-
-        @Override
-        protected void setExpectationsForResponseCode() throws Exception {
+        private void setExpectationsForResponseCode() throws Exception {
             oneOf(mockConnection).getResponseCode();
             will(returnValue(HTTPResponseCode.OK));
         }
 
-        @Override
-        protected void setExpectationsForInputStream() throws Exception {
+        private void setExpectationsForInputStream() throws Exception {
             mockInputStream = new ByteArrayInputStream("{\"data\" : \"json\"}".getBytes());
             oneOf(mockConnection).getInputStream();
             will(returnValue(mockInputStream));
+        }
+    }
+
+    private final class ExpectationsForBadConnection extends ExpectationsForTest {
+        public ExpectationsForBadConnection() throws Exception {
+            super();
+        }
+
+        @Override
+        protected void setExpectationsForConnection() throws Exception {
+            oneOf(mockConnection).connect();
+            oneOf(mockConnection).setRequestProperty("Content-Type", "application/json");
+            oneOf(mockConnection).setRequestMethod(HTTPRequestMethod.GET);
+            oneOf(mockConnection).setDoOutput(Boolean.FALSE);
+
+            oneOf(mockConnection).getResponseCode();
+            will(returnValue(HTTPResponseCode.NOT_FOUND));
+
+            oneOf(mockConnection).disconnect();
         }
     }
 }

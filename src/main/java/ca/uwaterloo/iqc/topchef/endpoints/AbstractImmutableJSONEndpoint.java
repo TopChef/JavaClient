@@ -4,9 +4,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
-import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
-import ca.uwaterloo.iqc.topchef.exceptions.MethodNotAllowedException;
-import ca.uwaterloo.iqc.topchef.exceptions.ResourceNotFoundException;
+import ca.uwaterloo.iqc.topchef.exceptions.*;
 import org.jetbrains.annotations.Contract;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,7 +28,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
     }
 
     @Override
-    public JSONObject getJSON() throws ParseException, IOException, MethodNotAllowedException, ResourceNotFoundException {
+    public JSONObject getJSON() throws ParseException, IOException, HTTPException {
         URLConnection connection = openConnection(this.getURL());
         configureConnectionForJSONGet(connection);
 
@@ -38,9 +36,9 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
 
         try {
             assertGoodResponseCode(connection);
-        } catch (Exception error){
+        } catch (HTTPException error){
             handleBadConnectionAssert(error, connection);
-            throw new IOException("Attempting to get JSON returned bad response", error);
+            throw error;
         }
 
         try {
@@ -54,16 +52,16 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
     }
 
     private void assertGoodResponseCode(URLConnection connection) throws MethodNotAllowedException,
-            ResourceNotFoundException, IOException {
+            ResourceNotFoundException, InternalServerErrorException, IOException {
         HTTPResponseCode code = connection.getResponseCode();
 
         switch (code) {
             case NOT_FOUND:
-                throw new ResourceNotFoundException("Unable to find resource at URL");
+                throw new ResourceNotFoundException();
             case METHOD_NOT_ALLOWED:
                 throw new MethodNotAllowedException();
             case INTERNAL_SERVER_ERROR:
-                throw new IOException();
+                throw new InternalServerErrorException();
         }
     }
 
@@ -82,7 +80,8 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
         connection.setRequestMethod(HTTPRequestMethod.GET);
     }
 
-    private static JSONObject readJSONFromConnection(URLConnection connection) throws ParseException, IOException {
+    private static JSONObject readJSONFromConnection(URLConnection connection) throws ParseException, IOException,
+            ClassCastException {
         InputStream stream = connection.getInputStream();
         Reader reader = new InputStreamReader(stream);
 
