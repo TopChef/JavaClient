@@ -47,6 +47,12 @@ dependencies {
     // Use JSON simple to format and parse JSON
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
+    // Forget JSON simple, Jackson is the future. Let's use this
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.3'
+
+    // Lombok makes working with data classes super-easy
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.8'
+
     // JetBrains Annotations
     compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
 
