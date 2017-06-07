@@ -1,6 +1,7 @@
 package ca.uwaterloo.iqc.topchef.test.unit.adapters.com.fasterxml.jackson.core;
 
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
+import ca.uwaterloo.iqc.topchef.test.unit.AbstractUnitTestCase;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 public final class ReadToObject extends AbstractJacksonTestCase {
     @Property
     public void writesToObject(
-            @From(ComplexJSONGenerator.class) OneOfEverythingJSON json
+            @From(ComplexJSONGenerator.class) AbstractUnitTestCase.ComplexJSON json
     ) throws Exception {
         ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper.ObjectMapper();
         String jsonAsString = mapper.writeValueAsString(json);

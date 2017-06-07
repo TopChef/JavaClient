@@ -1,6 +1,7 @@
 package ca.uwaterloo.iqc.topchef.test.unit.adapters.com.fasterxml.jackson.core;
 
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
+import ca.uwaterloo.iqc.topchef.test.unit.AbstractUnitTestCase;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
@@ -19,12 +20,12 @@ import static org.junit.Assert.assertEquals;
 public final class ReadValueUsingInputStream extends AbstractJacksonTestCase {
     @Property
     public void inputStream(
-            @From(ComplexJSONGenerator.class) OneOfEverythingJSON json
+            @From(ComplexJSONGenerator.class) AbstractUnitTestCase.ComplexJSON json
     ) throws Exception {
         ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper.ObjectMapper();
         InputStream jsonAsStream = new ByteArrayInputStream(mapper.writeValueAsString(json).getBytes());
 
-        OneOfEverythingJSON deserializedJSON = mapper.readValue(jsonAsStream, json.getClass());
+        ComplexJSON deserializedJSON = mapper.readValue(jsonAsStream, json.getClass());
 
         assertEquals(json, deserializedJSON);
     }
