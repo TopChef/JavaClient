@@ -1,15 +1,12 @@
 package ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints;
 
+import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.*;
-import org.jetbrains.annotations.Contract;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +22,10 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
     private static final Logger log = LoggerFactory.getLogger(AbstractImmutableJSONEndpoint.class);
 
     /**
-     * A parser used to parse JSON
+     * A mapper that can be used to read and marshall JSON
      */
-    private static final JSONParser parser = new JSONParser();
+    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
+            .wrapper.ObjectMapper();
 
     /**
      *
@@ -41,30 +39,45 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      *
      * @return A {@link JSONObject} containing the request body. If the request returned a JSON array (very unlikely),
      * then the array will be located within this request in the "data" keyword
-     * @throws ParseException If the returned string could not be parsed
      * @throws IOException If there is a problem talking to the API
      * @throws HTTPException If an HTTP status code other than {@link HTTPResponseCode#OK} was returned with this
      * get Request
      */
     @Override
-    public JSONObject getJSON() throws ParseException, IOException, HTTPException {
+    public Object getJSON() throws IOException, HTTPException {
         URLConnection connection = openConnection(this.getURL());
         configureConnectionForJSONGet(connection);
 
         connection.connect();
 
-        try {
-            assertGoodResponseCode(connection);
-        } catch (HTTPException error){
-            handleBadConnectionAssert(error, connection);
-            throw error;
-        }
+        assertGoodResponseCode(connection);
 
         try {
-            return readJSONFromConnection(connection);
-        } catch (ClassCastException error) {
-            handleJSONObjectCastException(error);
-            throw new IOException(error);
+            return mapper.readValue(connection.getInputStream(), Object.class);
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    /**
+     *
+     * @param desiredType The class to which the JSON from the server is to be marshalled
+     * @param <T> The type to which the JSON is to be marshalled
+     * @return An instance of the required type, built from this endpoint
+     * @throws IOException
+     * @throws HTTPException
+     */
+    @Override
+    public <T> T getJSON(Class<T> desiredType) throws IOException, HTTPException {
+        URLConnection connection = openConnection(this.getURL());
+        configureConnectionForJSONGet(connection);
+
+        connection.connect();
+
+        assertGoodResponseCode(connection);
+
+        try {
+            return mapper.readValue(connection.getInputStream(), desiredType);
         } finally {
             connection.disconnect();
         }
@@ -124,64 +137,9 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
 
     /**
      *
-     * @param connection The connection from which data is to be read
-     * @return The parsed JSON data
-     * @throws ParseException If the returned data cannot be parsed
-     * @throws IOException If communication with the API cannot be established
-     * @throws ClassCastException If the resulting data cannot be cast to a {@link JSONObject}
-     */
-    private static JSONObject readJSONFromConnection(URLConnection connection) throws ParseException, IOException,
-            ClassCastException {
-        InputStream stream = connection.getInputStream();
-        Reader reader = new InputStreamReader(stream);
-
-        Object result = parser.parse(reader);
-
-        return castToJSONObject(result);
-    }
-
-    /**
-     *
-     * @param result The result from the JSON parser
-     * @return The result cast to an {@link JSONObject}
-     * @throws ClassCastException If the result cannot be cast correctly
-     */
-    @Contract(pure = true)
-    @SuppressWarnings("unchecked")
-    private static JSONObject castToJSONObject(Object result) throws ClassCastException {
-        JSONObject jsonData;
-        if (result instanceof JSONArray) {
-            jsonData = new JSONObject();
-            jsonData.put("data", result);
-        } else {
-            jsonData = (JSONObject) result;
-        }
-        return jsonData;
-    }
-
-    /**
-     *
      * @param error The error to handle
      */
     private static void handleConnectionCastException(HTTPConnectionCastException error) {
         log.error("Attempting to cast to HTTP connection threw error", error);
-    }
-
-    /**
-     *
-     * @param error The handled error
-     */
-    private static void handleJSONObjectCastException(ClassCastException error){
-        log.error("Attempting to cast object to JSONObject threw error", error);
-    }
-
-    /**
-     *
-     * @param error The error to handle
-     * @param offendingConnection The connection that caused the error
-     */
-    private static void handleBadConnectionAssert(Exception error, URLConnection offendingConnection){
-        offendingConnection.disconnect();
-        log.error("Attempting to get JSON resulted in invalid response code", error);
     }
 }
