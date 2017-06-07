@@ -1,29 +1,25 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
 import ca.uwaterloo.iqc.topchef.Client;
+import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
-import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
-import org.jetbrains.annotations.Contract;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
+import lombok.Data;
 import java.io.*;
 import java.util.*;
 
 /**
  * Implements the service endpoint for the TopChef API
  */
-public class ServicesEndpoint extends AbstractEndpoint implements Services {
-
-    private static final Logger log = LoggerFactory.getLogger(ServicesEndpoint.class);
+public class ServicesEndpoint extends AbstractImmutableJSONEndpoint implements Services {
+    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
+            .wrapper.ObjectMapper();
 
     /**
      * The client for which this endpoint operates
@@ -39,45 +35,24 @@ public class ServicesEndpoint extends AbstractEndpoint implements Services {
         this.client = client;
     }
 
-    /**
-     *
-     * @return The list of services that the API recognizes
-     * @throws IOException If connection to the API could not be established
-     */
     @Override
     public List<Service> getServices() throws IOException {
-        URLConnection connection = getConnectionToServicesGetter();
-        connection.connect();
-        assertGoodConnection(connection);
-        JSONArray response;
+        URLConnection connection = openConnectionForGettingServices(this.getURL());
 
         try {
-            response = readDataFromConnection(connection);
-        } catch (ParseException error){
-            log.error("Reading response from request threw error", error);
+            connection.connect();
+            return readServicesFromConnection(connection);
+        } catch (UnexpectedResponseCodeException error) {
             throw new IOException(error);
-        }
-
-        connection.disconnect();
-
-        try {
-            return parseResponse(response);
-        } catch (ParseException error){
-            log.error("Parsing response from request threw error", error);
-            throw new IOException(error);
+        } finally {
+            connection.disconnect();
         }
     }
 
-    /**
-     *
-     * @param serviceID The ID of the service to find
-     * @return The service
-     * @throws ServiceNotFoundException If the service is not found
-     * @throws IOException If I/O to the API cannot be established
-     */
     @Override
-    public Service getServiceByUUID(UUID serviceID) throws ServiceNotFoundException, IOException {
+    public Service getServiceByUUID(UUID serviceID) throws IOException, ServiceNotFoundException {
         Service service = new ServiceEndpoint(client, serviceID);
+
         Boolean doesServiceExist;
 
         try {
@@ -89,106 +64,68 @@ public class ServicesEndpoint extends AbstractEndpoint implements Services {
         if (!doesServiceExist){
             throw new ServiceNotFoundException(
                     String.format(
-                            "The service with id %s could not be found.", serviceID.toString()
-                    ));
-        } else {
-            return service;
+                            "The service with ID %s was not found", serviceID
+                    )
+            );
         }
+
+        return service;
     }
 
-    /**
-     *
-     * @param serviceID The desired service ID
-     * @return The service
-     * @throws ServiceNotFoundException If the service cannot be found
-     * @throws IOException If I/O to the API server cannot be established
-     * @throws IllegalArgumentException If the string entered is not a UUID
-     */
-    @Override public Service getServiceByUUID(String serviceID) throws ServiceNotFoundException, IOException,
-            IllegalArgumentException {
+    @Override
+    public Service getServiceByUUID(String serviceID) throws IOException, ServiceNotFoundException {
         return getServiceByUUID(UUID.fromString(serviceID));
     }
 
-    /**
-     *
-     * @return An open connection to the API
-     * @throws IOException If the connection cannot be established
-     */
-    private URLConnection getConnectionToServicesGetter() throws IOException {
+    private static URLConnection openConnectionForGettingServices(URL url) throws IOException, RuntimeException {
         URLConnection connection;
-
         try {
-            connection = this.getURL().openConnection();
+            connection = url.openConnection();
         } catch (HTTPConnectionCastException error){
             throw new RuntimeException(error);
         }
 
-        connection.setRequestMethod(HTTPRequestMethod.GET);
         connection.setDoOutput(Boolean.FALSE);
+        connection.setRequestMethod(HTTPRequestMethod.GET);
         connection.setRequestProperty("Content-Type", "application/json");
 
         return connection;
     }
 
-    /**
-     *
-     * @param connection Check that the connection is open
-     * @throws IOException If the connection does not return the correct status code
-     */
-    private static void assertGoodConnection(URLConnection connection) throws IOException {
+    private List<Service> readServicesFromConnection(URLConnection connection) throws IOException,
+            UnexpectedResponseCodeException {
+        assertGoodResponseCode(connection);
+        ServiceListResponse data = mapper.readValue(connection.getInputStream(), ServiceListResponse.class);
+
+        List<Service> constructedServiceList = new LinkedList<Service>();
+
+        for (ServiceData service: data.data){
+            constructedServiceList.add(new ServiceEndpoint(client, service.getId()));
+        }
+
+        return constructedServiceList;
+    }
+
+    private static void assertGoodResponseCode(URLConnection connection) throws IOException,
+            UnexpectedResponseCodeException {
         HTTPResponseCode code = connection.getResponseCode();
 
-        if (code != HTTPResponseCode.OK){
-            throw new IOException(
-                    String.format("Expected OK response, but response was actually %s", code)
-            );
+        if (code != HTTPResponseCode.OK) {
+            throw new UnexpectedResponseCodeException(code, connection);
         }
     }
 
-    /**
-     *
-     * @param connection The connection to use
-     * @return The parsed data
-     * @throws IOException If the connection cannot be established
-     * @throws ParseException If the JSON cannot be parsed
-     */
-    private static JSONArray readDataFromConnection(URLConnection connection) throws IOException, ParseException {
-        InputStream requestBody = connection.getInputStream();
-        Reader requestBodyReader = new BufferedReader(new InputStreamReader(requestBody));
-
-        JSONParser parser = new JSONParser();
-
-        JSONObject data = (JSONObject) parser.parse(requestBodyReader);
-
-        return (JSONArray) data.get("data");
+    @Data
+    public static class ServiceListResponse {
+        private List<ServicesEndpoint.ServiceData> data;
+        private Object meta;
     }
 
-    /**
-     *
-     * @param response The response
-     * @return The service list
-     * @throws ParseException If the response cannot be parsed
-     */
-    @Contract("null -> fail")
-    private List<Service> parseResponse(Object response) throws ParseException {
-        List<Service> data = new LinkedList<Service>();
-
-        JSONArray serviceList;
-        if (response instanceof JSONArray){
-            serviceList = (JSONArray) response;
-        } else {
-            throw new ParseException(ParseException.ERROR_UNEXPECTED_EXCEPTION, response);
-        }
-
-        for (Object service: serviceList){
-            if (service instanceof JSONObject) {
-                JSONObject serviceObject = (JSONObject) service;
-                data.add(new ServiceEndpoint(this.client, serviceObject.get("id").toString()));
-            } else {
-                throw new ParseException(0, ParseException.ERROR_UNEXPECTED_CHAR, service);
-            }
-        }
-
-        return data;
+    @Data
+    public static class ServiceData {
+        private UUID id;
+        private Boolean has_timed_out;
+        private String name;
+        private String url;
     }
 }

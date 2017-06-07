@@ -6,7 +6,6 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.*;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +36,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
 
     /**
      *
-     * @return A {@link JSONObject} containing the request body. If the request returned a JSON array (very unlikely),
+     * @return An {@link Object} containing the request body. If the request returned a JSON array (very unlikely),
      * then the array will be located within this request in the "data" keyword
      * @throws IOException If there is a problem talking to the API
      * @throws HTTPException If an HTTP status code other than {@link HTTPResponseCode#OK} was returned with this

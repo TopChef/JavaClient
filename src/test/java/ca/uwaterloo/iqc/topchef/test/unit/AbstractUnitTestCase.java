@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Base class for all unit tests in the project.
@@ -279,6 +280,18 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
             }
 
             return stringList;
+        }
+    }
+
+    protected static final class UUIDGenerator extends Generator<UUID>{
+        public UUIDGenerator(){
+            super(UUID.class);
+        }
+
+        @NotNull
+        @Override
+        public UUID generate(SourceOfRandomness rng, GenerationStatus status){
+            return UUID.randomUUID();
         }
     }
 }
