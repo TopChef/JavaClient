@@ -1,4 +1,4 @@
-package ca.uwaterloo.iqc.topchef.endpoints;
+package ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;

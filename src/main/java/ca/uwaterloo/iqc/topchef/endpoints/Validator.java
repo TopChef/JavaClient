@@ -1,5 +1,6 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.Endpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
 import org.json.simple.JSONAware;
 import org.json.simple.parser.ParseException;

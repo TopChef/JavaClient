@@ -1,11 +1,11 @@
-package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoint;
+package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.abstract_endpoint;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
-import ca.uwaterloo.iqc.topchef.endpoints.AbstractEndpoint;
-import ca.uwaterloo.iqc.topchef.endpoints.Endpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.Endpoint;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;

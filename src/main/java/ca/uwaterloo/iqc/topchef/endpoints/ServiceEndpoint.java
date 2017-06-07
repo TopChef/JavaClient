@@ -1,6 +1,7 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
 import ca.uwaterloo.iqc.topchef.Client;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
 
 import java.util.UUID;
 

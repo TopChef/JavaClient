@@ -1,6 +1,7 @@
-package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoint;
+package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.abstract_endpoint;
 
-import ca.uwaterloo.iqc.topchef.endpoints.Endpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.Endpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URL;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.AbstractEndpoint#AbstractEndpoint(ca.uwaterloo.iqc.topchef.adapters.java.net.URL)}
+ * Contains unit tests for {@link AbstractEndpoint#AbstractEndpoint(ca.uwaterloo.iqc.topchef.adapters.java.net.URL)}
  */
 public final class URLConstructor extends AbstractAbstractEndpointTestCase {
     private static final Logger log = LoggerFactory.getLogger(URLConstructor.class);

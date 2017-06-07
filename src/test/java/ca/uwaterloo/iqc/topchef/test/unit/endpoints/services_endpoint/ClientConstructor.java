@@ -2,7 +2,7 @@ package ca.uwaterloo.iqc.topchef.test.unit.endpoints.services_endpoint;
 
 import ca.uwaterloo.iqc.topchef.Client;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
-import ca.uwaterloo.iqc.topchef.endpoints.Endpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.Endpoint;
 import ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 import org.jmock.Expectations;
