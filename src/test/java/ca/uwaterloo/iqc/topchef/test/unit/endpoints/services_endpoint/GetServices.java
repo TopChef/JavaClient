@@ -17,9 +17,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +39,9 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
 
     private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
+
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
 
     @Property
     public void getServicesHappyPath(
@@ -56,6 +63,21 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
         assertResponseIDsEqualServiceIDs(response, services);
 
         context.assertIsSatisfied();
+    }
+
+    @Test
+    public void getServicesBadResponseCode() throws Exception {
+        Mockery context = new Mockery();
+        MockingPackage mocks = new MockingPackage(context);
+
+        context.checking(new ExpectationsForBadResponseCode(mocks));
+
+        Services services = new ServicesEndpoint(mocks.getClient());
+
+        expectedException.expect(IOException.class);
+
+        services.getServices();
+
     }
 
     private static void assertResponseIDsEqualServiceIDs(ServicesEndpoint.ServiceListResponse response, List<Service>
@@ -145,6 +167,30 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
             oneOf(connection).setRequestProperty("Content-Type", "application/json");
             oneOf(connection).getResponseCode();
             will(returnValue(HTTPResponseCode.OK));
+        }
+    }
+
+    private static final class ExpectationsForBadResponseCode extends TestExpectations {
+        public ExpectationsForBadResponseCode(MockingPackage mocks) throws Exception {
+            super(mocks.getClient(), mocks.getResolver(), mocks.getServiceURL(), mocks.getConnectionToServices());
+            oneOf(mocks.getServiceURL()).openConnection();
+            will(returnValue(mocks.getConnectionToServices()));
+        }
+
+        @Override
+        public void expectationsForServiceURL(URL serviceURL) throws Exception {
+        }
+
+        @Override
+        public void expectationsForConnection(URLConnection connection) throws Exception {
+            oneOf(connection).connect();
+            oneOf(connection).disconnect();
+
+            oneOf(connection).setDoOutput(Boolean.FALSE);
+            oneOf(connection).setRequestMethod(HTTPRequestMethod.GET);
+            oneOf(connection).setRequestProperty("Content-Type", "application/json");
+            oneOf(connection).getResponseCode();
+            will(returnValue(HTTPResponseCode.INTERNAL_SERVER_ERROR));
         }
     }
 }
