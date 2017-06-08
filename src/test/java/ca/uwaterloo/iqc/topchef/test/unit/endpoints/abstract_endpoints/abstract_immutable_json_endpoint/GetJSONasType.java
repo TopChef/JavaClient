@@ -26,6 +26,7 @@ import java.lang.reflect.Constructor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Contains unit tests for
@@ -59,22 +60,22 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
 
     @Test
     public void getJSONResourceNotFound() throws Exception {
-        runTest(ResourceNotFoundException.class, ResourceNotFoundExpectations.class);
+        assertTrue(runTest(ResourceNotFoundException.class, ResourceNotFoundExpectations.class));
     }
 
     @Test
     public void getJSONMethodNotAllowed() throws Exception {
-        runTest(MethodNotAllowedException.class, MethodNotAllowedExpectations.class);
+        assertTrue(runTest(MethodNotAllowedException.class, MethodNotAllowedExpectations.class));
     }
 
     @Test
     public void getJSONInternalError() throws Exception {
-        runTest(InternalServerErrorException.class, InternalServerErrorExpectations.class);
+        assertTrue(runTest(InternalServerErrorException.class, InternalServerErrorExpectations.class));
     }
 
     @Test
     public void getJSONNoContent() throws Exception {
-        runTest(NoContentException.class, NoContentExpectations.class);
+        assertTrue(runTest(NoContentException.class, NoContentExpectations.class));
     }
 
     @Test
@@ -91,7 +92,7 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
         context.assertIsSatisfied();
     }
 
-    private <T extends TestExpectations> void runTest(Class<? extends Exception> exception, Class<T> expectations)
+    private <T extends TestExpectations> Boolean runTest(Class<? extends Exception> exception, Class<T> expectations)
             throws Exception {
         Mockery context = new Mockery();
         MockPackage mocks = new MockPackage(context);
@@ -106,6 +107,8 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
         assertNull(endpoint.getJSON(JSON.class));
 
         context.assertIsSatisfied();
+
+        return Boolean.TRUE;
     }
 
     private final class MockPackage {

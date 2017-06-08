@@ -9,7 +9,6 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.Service;
 import ca.uwaterloo.iqc.topchef.endpoints.Services;
 import ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint;
-import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
