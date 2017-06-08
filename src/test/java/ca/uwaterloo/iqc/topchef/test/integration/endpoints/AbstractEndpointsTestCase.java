@@ -12,8 +12,8 @@ import java.net.MalformedURLException;
 /**
  * Base class for {@link ca.uwaterloo.iqc.topchef.endpoints}
  */
-public abstract class AbstractEndpointModelsTestCase extends AbstractIntegrationTestCase {
-    private static final Logger log = LoggerFactory.getLogger(AbstractEndpointModelsTestCase.class);
+public abstract class AbstractEndpointsTestCase extends AbstractIntegrationTestCase {
+    private static final Logger log = LoggerFactory.getLogger(AbstractEndpointsTestCase.class);
 
     protected Client client;
 

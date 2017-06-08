@@ -1,7 +1,7 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.services_endpoint;
 
 import ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint;
-import ca.uwaterloo.iqc.topchef.test.unit.endpoints.AbstractEndpointModelsTestCase;
+import ca.uwaterloo.iqc.topchef.test.unit.endpoints.AbstractEndpointsTestCase;
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.generator.java.lang.StringGenerator;
@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Base class for unit tests of {@link ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint}
  */
-public abstract class AbstractServicesEndpointTestCase extends AbstractEndpointModelsTestCase {
+public abstract class AbstractServicesEndpointTestCase extends AbstractEndpointsTestCase {
 
     protected static final class ServiceDataGenerator extends Generator<ServicesEndpoint.ServiceData> {
         private static final Generator<String> nameGenerator = new StringGenerator();
