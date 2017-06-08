@@ -2,6 +2,7 @@ package ca.uwaterloo.iqc.topchef;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.endpoints.*;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
 import ca.uwaterloo.iqc.topchef.url_resolver.Resolver;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
@@ -73,7 +74,7 @@ public class TopChefClient implements Client {
     }
 
     @Override
-    public List<Service> getServices() throws IOException {
+    public List<Service> getServices() throws HTTPException, IOException {
         Services serviceEndpoint = new ServicesEndpoint(this);
         return serviceEndpoint.getServices();
     }

@@ -80,49 +80,6 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
     }
 
     /**
-     *
-     * Tests that {@link IOException} is thrown if a response other than
-     * {@link HTTPResponseCode#OK} is returned by the server
-     *
-     * @throws Exception If an exception is thrown
-     */
-    @Test
-    public void getServicesBadResponseCode() throws Exception {
-        Mockery context = new Mockery();
-        MockingPackage mocks = new MockingPackage(context);
-
-        context.checking(new ExpectationsForBadResponseCode(mocks));
-
-        Services services = new ServicesEndpoint(mocks.getClient());
-
-        expectedException.expect(IOException.class);
-
-        services.getServices();
-
-    }
-
-    /**
-     * Tests that a {@link ClassCastException} is thrown if the {@link URLConnection} is not
-     * an HTTP connection
-     *
-     * @throws Exception If the underlying test throws an exception
-     */
-    @Test
-    public void getServicesCastExceptionThrown() throws Exception {
-        Mockery context = new Mockery();
-        MockingPackage mocks = new MockingPackage(context);
-
-        context.checking(new ExpectationsForCastError(mocks));
-
-        Services services = new ServicesEndpoint(mocks.getClient());
-        expectedException.expect(ClassCastException.class);
-
-        services.getServices();
-
-        context.assertIsSatisfied();
-    }
-
-    /**
      * Iterate throught the list of services and check that the UUIDs of each service match
      * @param response The mock response
      * @param services The response returned by the endpoint that is to be checked

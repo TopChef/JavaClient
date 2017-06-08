@@ -1,15 +1,10 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
 import ca.uwaterloo.iqc.topchef.Client;
-import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
-import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +15,6 @@ import java.util.*;
  * Implements the service endpoint for the TopChef API
  */
 public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Services {
-    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
-            .wrapper.ObjectMapper();
-
     /**
      * The client for which this endpoint operates
      */
@@ -43,17 +35,9 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
      * @throws IOException If the list could not be retrieved
      */
     @Override
-    public List<Service> getServices() throws IOException {
-        URLConnection connection = openConnectionForGettingServices(this.getURL());
-
-        try {
-            connection.connect();
-            return readServicesFromConnection(connection);
-        } catch (UnexpectedResponseCodeException error) {
-            throw new IOException(error);
-        } finally {
-            connection.disconnect();
-        }
+    public List<Service> getServices() throws IOException, HTTPException {
+        ServiceListResponse data = this.getJSON(ServiceListResponse.class);
+        return readServices(data);
     }
 
     /**
@@ -98,42 +82,14 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
         return getServiceByUUID(UUID.fromString(serviceID));
     }
 
-    private static URLConnection openConnectionForGettingServices(URL url) throws IOException, ClassCastException {
-        URLConnection connection;
-        try {
-            connection = url.openConnection();
-        } catch (HTTPConnectionCastException error){
-            throw new ClassCastException("Unable to cast connection to HTTP connection");
-        }
-
-        connection.setDoOutput(Boolean.FALSE);
-        connection.setRequestMethod(HTTPRequestMethod.GET);
-        connection.setRequestProperty("Content-Type", "application/json");
-
-        return connection;
-    }
-
-    private List<Service> readServicesFromConnection(URLConnection connection) throws IOException,
-            UnexpectedResponseCodeException {
-        assertGoodResponseCode(connection);
-        ServiceListResponse data = mapper.readValue(connection.getInputStream(), ServiceListResponse.class);
-
+    private List<Service> readServices(ServiceListResponse data) {
         List<Service> constructedServiceList = new LinkedList<Service>();
 
-        for (ServiceData service: data.data){
+        for (ServiceData service: data.getData()){
             constructedServiceList.add(new ServiceEndpoint(client, service.getId()));
         }
 
         return constructedServiceList;
-    }
-
-    private static void assertGoodResponseCode(URLConnection connection) throws IOException,
-            UnexpectedResponseCodeException {
-        HTTPResponseCode code = connection.getResponseCode();
-
-        if (code != HTTPResponseCode.OK) {
-            throw new UnexpectedResponseCodeException(code, connection);
-        }
     }
 
     public static class ServiceListResponse {
