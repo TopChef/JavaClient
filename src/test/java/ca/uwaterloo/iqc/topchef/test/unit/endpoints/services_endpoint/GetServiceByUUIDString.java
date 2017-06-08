@@ -8,8 +8,6 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.Service;
 import ca.uwaterloo.iqc.topchef.endpoints.Services;
 import ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint;
-import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
-import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
@@ -19,7 +17,6 @@ import org.jetbrains.annotations.Contract;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
@@ -28,10 +25,10 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint#getServiceByUUID(UUID)}
+ * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint#getServiceByUUID(String)}
  */
 @RunWith(JUnitQuickcheck.class)
-public class GetServiceByUUID extends AbstractServicesEndpointTestCase {
+public class GetServiceByUUIDString extends AbstractServicesEndpointTestCase {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -45,39 +42,9 @@ public class GetServiceByUUID extends AbstractServicesEndpointTestCase {
         context.checking(new TrueTestExpectations(mocks));
         Services services = new ServicesEndpoint(mocks.getClient());
 
-        Service service = services.getServiceByUUID(uuid);
+        Service service = services.getServiceByUUID(uuid.toString());
 
         assertEquals(uuid, service.getServiceID());
-
-        context.assertIsSatisfied();
-    }
-
-    @Property
-    public void serviceDoesNotExist(
-        @From(UUIDGenerator.class) UUID uuid
-    ) throws Exception {
-        Mockery context = new Mockery();
-        MockingPackage mocks = new MockingPackage(context);
-        context.checking(new ExpectationsForServiceNotFound(mocks));
-        Services services = new ServicesEndpoint(mocks.getClient());
-
-        expectedException.expect(ServiceNotFoundException.class);
-        services.getServiceByUUID(uuid);
-
-        context.assertIsSatisfied();
-    }
-
-    @Test
-    public void castExceptionThrown() throws Exception {
-        Mockery context = new Mockery();
-        MockingPackage mocks = new MockingPackage(context);
-
-        context.checking(new ExpectationsForCastError(mocks));
-
-        Services endpoint = new ServicesEndpoint(mocks.getClient());
-
-        expectedException.expect(RuntimeException.class);
-        endpoint.getServiceByUUID(UUID.randomUUID());
 
         context.assertIsSatisfied();
     }
@@ -139,37 +106,6 @@ public class GetServiceByUUID extends AbstractServicesEndpointTestCase {
         @Override
         protected HTTPResponseCode getResponseCode(){
             return HTTPResponseCode.OK;
-        }
-    }
-
-    private final class ExpectationsForServiceNotFound extends TestExpectations {
-        public ExpectationsForServiceNotFound(MockingPackage mocks) throws Exception {
-            super(mocks);
-        }
-
-        @Contract(pure = true)
-        @Override
-        protected HTTPResponseCode getResponseCode(){
-            return HTTPResponseCode.NOT_FOUND;
-        }
-    }
-
-    private final class ExpectationsForCastError extends Expectations {
-        public ExpectationsForCastError(MockingPackage mocks) throws Exception {
-            allowing(mocks.getClient()).getURLResolver();
-            will(returnValue(mocks.getResolver()));
-
-            oneOf(mocks.getResolver()).getServicesEndpoint();
-            will(returnValue(mocks.getServicesEndpoint()));
-
-            oneOf(mocks.getServicesEndpoint()).openConnection();
-            will(throwException(new HTTPConnectionCastException(new Exception())));
-
-            oneOf(mocks.getResolver()).getServiceEndpoint(with(any(UUID.class)));
-            will(returnValue(mocks.getServiceEndpoint()));
-
-            oneOf(mocks.getServiceEndpoint()).openConnection();
-            will(throwException(new HTTPConnectionCastException(new Exception())));
         }
     }
 }

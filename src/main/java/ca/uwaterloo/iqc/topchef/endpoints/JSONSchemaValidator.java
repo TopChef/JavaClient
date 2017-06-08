@@ -9,7 +9,9 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 
 /**
@@ -49,7 +51,11 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
     @Override
     public Boolean validate(Object instance, Object schema) throws IOException, UnexpectedResponseCodeException {
         URLConnection connection = openConnection();
-        ValidationRequest request = new ValidationRequest(instance, schema);
+
+        ValidationRequest request = new ValidationRequest();
+        request.setSchema(schema);
+        request.setObject(instance);
+
         return validateRequest(request, connection);
     }
 
@@ -65,7 +71,11 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
     @Override
     public Boolean validate(String instance, String schema) throws IOException, UnexpectedResponseCodeException {
         URLConnection connection = openConnection();
-        ValidationRequest request = new ValidationRequest(jsonMapper.readValue(instance), jsonMapper.readValue(schema));
+
+        ValidationRequest request = new ValidationRequest();
+        request.setSchema(jsonMapper.readValue(schema));
+        request.setObject(jsonMapper.readValue(instance));
+
         return validateRequest(request, connection);
     }
 
@@ -134,16 +144,19 @@ public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
     /**
      * A representation of the JSON to be sent to the validator via a POST request
      */
-    @Data
     private static final class ValidationRequest {
         /**
          * The instance to check
          */
-        private final Object object;
+        @Getter
+        @Setter
+        private Object object;
 
         /**
          * The desired schema
          */
-        private final Object schema;
+        @Getter
+        @Setter
+        private Object schema;
     }
 }

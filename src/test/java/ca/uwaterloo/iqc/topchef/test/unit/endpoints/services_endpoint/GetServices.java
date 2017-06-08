@@ -9,6 +9,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.Service;
 import ca.uwaterloo.iqc.topchef.endpoints.Services;
 import ca.uwaterloo.iqc.topchef.endpoints.ServicesEndpoint;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
@@ -78,6 +79,21 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
 
         services.getServices();
 
+    }
+
+    @Test
+    public void getServicesCastExceptionThrown() throws Exception {
+        Mockery context = new Mockery();
+        MockingPackage mocks = new MockingPackage(context);
+
+        context.checking(new ExpectationsForCastError(mocks));
+
+        Services services = new ServicesEndpoint(mocks.getClient());
+        expectedException.expect(RuntimeException.class);
+
+        services.getServices();
+
+        context.assertIsSatisfied();
     }
 
     private static void assertResponseIDsEqualServiceIDs(ServicesEndpoint.ServiceListResponse response, List<Service>
@@ -191,6 +207,25 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
             oneOf(connection).setRequestProperty("Content-Type", "application/json");
             oneOf(connection).getResponseCode();
             will(returnValue(HTTPResponseCode.INTERNAL_SERVER_ERROR));
+        }
+    }
+
+    private final class ExpectationsForCastError extends Expectations {
+        public ExpectationsForCastError(MockingPackage mocks) throws Exception {
+            allowing(mocks.getClient()).getURLResolver();
+            will(returnValue(mocks.getResolver()));
+
+            oneOf(mocks.getResolver()).getServicesEndpoint();
+            will(returnValue(mocks.getServiceURL()));
+
+            oneOf(mocks.getServiceURL()).openConnection();
+            will(throwException(new HTTPConnectionCastException(new Exception())));
+
+            oneOf(mocks.getResolver()).getServiceEndpoint(with(any(UUID.class)));
+            will(returnValue(mocks.getServiceURL()));
+
+            oneOf(mocks.getServiceURL()).openConnection();
+            will(throwException(new HTTPConnectionCastException(new Exception())));
         }
     }
 }
