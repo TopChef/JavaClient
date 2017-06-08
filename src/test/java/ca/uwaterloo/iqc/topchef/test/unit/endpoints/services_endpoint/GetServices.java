@@ -169,7 +169,7 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
          */
         @Override
         public void expectationsForServiceURL(URL serviceURL) throws Exception {
-
+            // All the logic for this method is done in the constructor. The empty body is intentional
         }
 
         /**
