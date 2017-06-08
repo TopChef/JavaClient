@@ -104,14 +104,14 @@ public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements 
      *
      * @return An open connection to the TopChef API
      * @throws IOException If I/O cannot be established
-     * @throws RuntimeException If the URLConnection cannot be cast to an HTTP request.
+     * @throws ClassCastException If the URLConnection cannot be cast to an HTTP request.
      */
-    private URLConnection openConnection() throws IOException, RuntimeException {
+    private URLConnection openConnection() throws IOException, ClassCastException {
         URLConnection connection;
         try {
             connection = this.getURL().openConnection();
         } catch (HTTPConnectionCastException error) {
-            throw new RuntimeException(error);
+            throw new ClassCastException("Unable to cast connection to HTTP connection");
         }
 
         connection.setDoOutput(Boolean.TRUE);

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Contains unit tests for
@@ -85,7 +86,7 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
         ImmutableJSONEndpoint endpoint = new ConcreteImmutableJSONEndpoint(mocks.getUrl());
 
         expectedException.expect(IOException.class);
-        endpoint.getJSON();
+        assertNull(endpoint.getJSON());
 
         context.assertIsSatisfied();
     }
@@ -102,7 +103,7 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
 
         expectedException.expect(exception);
 
-        endpoint.getJSON(JSON.class);
+        assertNull(endpoint.getJSON(JSON.class));
 
         context.assertIsSatisfied();
     }

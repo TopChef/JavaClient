@@ -19,12 +19,10 @@ import lombok.Setter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -166,11 +164,20 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
             will(returnValue(mocks.getInputStream()));
         }
 
+        /**
+         * @param serviceURL A mock URL for the ``/services`` endpoint of the TopChef API
+         * @throws Exception
+         */
         @Override
         public void expectationsForServiceURL(URL serviceURL) throws Exception {
 
         }
 
+        /**
+         *
+         * @param connection A mock implementation of a connection
+         * @throws Exception
+         */
         @Override
         public void expectationsForConnection(URLConnection connection) throws Exception {
             oneOf(connection).connect();
@@ -181,49 +188,6 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
             oneOf(connection).setRequestProperty("Content-Type", "application/json");
             oneOf(connection).getResponseCode();
             will(returnValue(HTTPResponseCode.OK));
-        }
-    }
-
-    private static final class ExpectationsForBadResponseCode extends TestExpectations {
-        public ExpectationsForBadResponseCode(MockingPackage mocks) throws Exception {
-            super(mocks.getClient(), mocks.getResolver(), mocks.getServiceURL(), mocks.getConnectionToServices());
-            oneOf(mocks.getServiceURL()).openConnection();
-            will(returnValue(mocks.getConnectionToServices()));
-        }
-
-        @Override
-        public void expectationsForServiceURL(URL serviceURL) throws Exception {
-        }
-
-        @Override
-        public void expectationsForConnection(URLConnection connection) throws Exception {
-            oneOf(connection).connect();
-            oneOf(connection).disconnect();
-
-            oneOf(connection).setDoOutput(Boolean.FALSE);
-            oneOf(connection).setRequestMethod(HTTPRequestMethod.GET);
-            oneOf(connection).setRequestProperty("Content-Type", "application/json");
-            oneOf(connection).getResponseCode();
-            will(returnValue(HTTPResponseCode.INTERNAL_SERVER_ERROR));
-        }
-    }
-
-    private final class ExpectationsForCastError extends Expectations {
-        public ExpectationsForCastError(MockingPackage mocks) throws Exception {
-            allowing(mocks.getClient()).getURLResolver();
-            will(returnValue(mocks.getResolver()));
-
-            oneOf(mocks.getResolver()).getServicesEndpoint();
-            will(returnValue(mocks.getServiceURL()));
-
-            oneOf(mocks.getServiceURL()).openConnection();
-            will(throwException(new HTTPConnectionCastException(new Exception())));
-
-            oneOf(mocks.getResolver()).getServiceEndpoint(with(any(UUID.class)));
-            will(returnValue(mocks.getServiceURL()));
-
-            oneOf(mocks.getServiceURL()).openConnection();
-            will(throwException(new HTTPConnectionCastException(new Exception())));
         }
     }
 }

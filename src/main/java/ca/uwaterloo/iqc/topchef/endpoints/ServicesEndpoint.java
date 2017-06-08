@@ -46,9 +46,11 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
      * @return The service
      * @throws IOException If the client could not contact the server
      * @throws ServiceNotFoundException If the server cannot be found
+     * @throws ClassCastException If the connection to determine if this server exists cannot be cast to
+     *  an HTTP connection
      */
     @Override
-    public Service getServiceByUUID(UUID serviceID) throws IOException, ServiceNotFoundException {
+    public Service getServiceByUUID(UUID serviceID) throws IOException, ServiceNotFoundException, ClassCastException {
         Service service = new ServiceEndpoint(client, serviceID);
 
         Boolean doesServiceExist;
@@ -56,7 +58,7 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
         try {
             doesServiceExist = service.isEndpointUp();
         } catch (HTTPConnectionCastException error){
-            throw new RuntimeException(error);
+            throw new ClassCastException("Unable to cast connection to HTTP connection");
         }
 
         if (!doesServiceExist){
