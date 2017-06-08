@@ -44,18 +44,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      */
     @Override
     public Object getJSON() throws IOException, HTTPException {
-        URLConnection connection = openConnection(this.getURL());
-        configureConnectionForJSONGet(connection);
-
-        connection.connect();
-
-        assertGoodResponseCode(connection);
-
-        try {
-            return mapper.readValue(connection.getInputStream(), Object.class);
-        } finally {
-            connection.disconnect();
-        }
+        return getJSON(Object.class);
     }
 
     /**
@@ -63,8 +52,8 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      * @param desiredType The class to which the JSON from the server is to be marshalled
      * @param <T> The type to which the JSON is to be marshalled
      * @return An instance of the required type, built from this endpoint
-     * @throws IOException
-     * @throws HTTPException
+     * @throws IOException If I/O with the server cannot be established
+     * @throws HTTPException If I/O can be established, but the response is not satisfactory.
      */
     @Override
     public <T> T getJSON(Class<T> desiredType) throws IOException, HTTPException {
@@ -108,6 +97,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
             case NO_CONTENT:
                 throw new NoContentException();
             default:
+                break;
         }
     }
 
