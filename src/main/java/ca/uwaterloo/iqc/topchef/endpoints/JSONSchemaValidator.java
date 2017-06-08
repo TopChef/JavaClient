@@ -6,7 +6,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
-import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Endpoint for validating URLs
  */
-public class JSONSchemaValidator extends AbstractEndpoint implements Validator {
+public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements Validator {
 
     private ObjectMapper jsonMapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper
             .ObjectMapper();

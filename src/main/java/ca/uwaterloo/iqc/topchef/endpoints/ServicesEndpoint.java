@@ -6,11 +6,10 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
-import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
 import ca.uwaterloo.iqc.topchef.exceptions.UnexpectedResponseCodeException;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +19,7 @@ import java.util.*;
 /**
  * Implements the service endpoint for the TopChef API
  */
-public class ServicesEndpoint extends AbstractImmutableJSONEndpoint implements Services {
+public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Services {
     private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
 
