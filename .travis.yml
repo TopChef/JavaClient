@@ -1,4 +1,4 @@
-# Travis CI Build file for BakeoutController
+# Travis CI Build file for JavaClient
 # Written by Michal Kononenko
 
 # We need sudo so we can use apt-get
@@ -38,5 +38,5 @@ script:
     - gradle test --tests *unit*
 
 after_success:
+    - gradle jacocoTestReport
     - codecov
-
