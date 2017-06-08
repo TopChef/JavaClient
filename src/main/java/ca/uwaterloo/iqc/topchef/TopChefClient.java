@@ -1,12 +1,16 @@
 package ca.uwaterloo.iqc.topchef;
 
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
-import ca.uwaterloo.iqc.topchef.endpoint_models.JSONSchemaValidator;
-import ca.uwaterloo.iqc.topchef.endpoint_models.Validator;
+import ca.uwaterloo.iqc.topchef.endpoints.*;
+import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
+import ca.uwaterloo.iqc.topchef.exceptions.ServiceNotFoundException;
 import ca.uwaterloo.iqc.topchef.url_resolver.Resolver;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Base class for interacting with the TopChef API
@@ -67,5 +71,23 @@ public class TopChefClient implements Client {
     @Override
     public Validator getJSONSchemaValidator(){
         return new JSONSchemaValidator(this);
+    }
+
+    @Override
+    public List<Service> getServices() throws HTTPException, IOException {
+        Services serviceEndpoint = new ServicesEndpoint(this);
+        return serviceEndpoint.getServices();
+    }
+
+    @Override
+    public Service getService(UUID id) throws IOException, ServiceNotFoundException {
+        Services serviceEndpoint = new ServicesEndpoint(this);
+        return serviceEndpoint.getServiceByUUID(id);
+    }
+
+    @Override
+    public Service getService(String id) throws IOException, ServiceNotFoundException, IllegalArgumentException {
+        Services endpoint = new ServicesEndpoint(this);
+        return endpoint.getServiceByUUID(id);
     }
 }

@@ -5,13 +5,18 @@ import ca.uwaterloo.iqc.topchef.test.AbstractTestCase;
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.generator.java.lang.AbstractStringGenerator;
+import com.pholser.junit.quickcheck.generator.java.lang.StringGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
+import lombok.Data;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Base class for all unit tests in the project.
@@ -22,6 +27,18 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
      * The log to use for writing down interesting things related to tests
      */
     private static final Logger log = LoggerFactory.getLogger(AbstractUnitTestCase.class);
+
+    /**
+     * A simple JSON object that contains a string entry
+     */
+    @Data
+    protected static final class SimpleJSONObject {
+        /**
+         * A string representing some data associated with this JSON object
+         */
+        private String someData;
+    }
+
 
     /**
      * A generator for making strings that are safe to use in the URL.
@@ -117,7 +134,7 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
                 new URL(baseURLString);
             } catch (MalformedURLException error){
                 log.error("Attempting to generate random data threw error", error);
-                throw new RuntimeException(error);
+                throw new IllegalStateException(error);
             }
 
             return baseURLString;
@@ -136,6 +153,145 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
             } else {
                 return "https";
             }
+        }
+    }
+
+    /**
+     * A more complicated JSON object containing a diversity of data types that need to
+     * be serialized correctly
+     */
+    @Data
+    protected static final class ComplexJSON {
+        /**
+         * A random string
+         */
+        private String string;
+
+        /**
+         * An integer
+         */
+        private Integer integer;
+
+        /**
+         * A floating-point number
+         */
+        private Number number;
+
+        /**
+         * A boolean value
+         */
+        private Boolean boolean_;
+
+        /**
+         * A list of strings
+         */
+        private List<String> listOfStrings;
+
+        /**
+         * A nested JSON object
+         */
+        private SimpleJSONObject nestedJSON;
+    }
+
+    /**
+     * Generate a simple JSON object
+     */
+    protected static final class SimpleJSONGenerator extends Generator<SimpleJSONObject> {
+
+        /**
+         * I need a random string generator. Fortunately, JUnit-Quickcheck provides one free of charge
+         */
+        private static final Generator<String> randomStringGenerator = new StringGenerator();
+
+        /**
+         * Register this generator with Quickcheck, letting it know that I'm generating this type
+         */
+        public SimpleJSONGenerator(){
+            super(SimpleJSONObject.class);
+        }
+
+        /**
+         *
+         * @param rng A random variable generator
+         * @param status The current generation status
+         * @return A randomly-generated simple JSON object
+         */
+        @Override
+        public SimpleJSONObject generate(SourceOfRandomness rng, GenerationStatus status){
+            SimpleJSONObject object = new SimpleJSONObject();
+            object.setSomeData(randomStringGenerator.generate(rng, status));
+            return object;
+        }
+    }
+
+    /**
+     * Generate some more complicated JSON
+     */
+    protected static final class ComplexJSONGenerator extends Generator<ComplexJSON> {
+        /**
+         * A generator of random strings
+         */
+        private static final Generator<String> randomStringGenerator = new StringGenerator();
+
+        /**
+         * A generator of a simple JSON object to nest inside this more complicated JSON object
+         */
+        private static final Generator<SimpleJSONObject> objectGenerator = new SimpleJSONGenerator();
+
+        /**
+         * Let Quickcheck know of this generator
+         */
+        public ComplexJSONGenerator(){
+            super(ComplexJSON.class);
+        }
+
+        /**
+         *
+         * @param rng A source of random variables
+         * @param status The generation status
+         * @return A randomly-generated JSON object
+         */
+        @Override
+        public ComplexJSON generate(SourceOfRandomness rng, GenerationStatus status){
+            ComplexJSON object = new ComplexJSON();
+
+            object.setBoolean_(rng.nextBoolean());
+            object.setNumber(rng.nextDouble());
+            object.setInteger(rng.nextInt());
+            object.setListOfStrings(getAListOfStrings(rng, status));
+            object.setNestedJSON(objectGenerator.generate(rng, status));
+
+            return object;
+        }
+
+        /**
+         *
+         * @param rng A source of random values
+         * @param status The current generation status
+         * @return A list of random strings
+         */
+        private List<String> getAListOfStrings(SourceOfRandomness rng, GenerationStatus status){
+            List<String> stringList = new LinkedList<String>();
+
+            Integer numberOfStringsToAdd = rng.nextInt(0, 100);
+
+            for (Integer index = 0; index < numberOfStringsToAdd; index++){
+                stringList.add(randomStringGenerator.generate(rng, status));
+            }
+
+            return stringList;
+        }
+    }
+
+    protected static final class UUIDGenerator extends Generator<UUID>{
+        public UUIDGenerator(){
+            super(UUID.class);
+        }
+
+        @NotNull
+        @Override
+        public UUID generate(SourceOfRandomness rng, GenerationStatus status){
+            return UUID.randomUUID();
         }
     }
 }
