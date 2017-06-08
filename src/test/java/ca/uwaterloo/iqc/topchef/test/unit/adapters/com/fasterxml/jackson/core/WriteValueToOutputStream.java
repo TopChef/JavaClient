@@ -18,15 +18,22 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(JUnitQuickcheck.class)
 public final class WriteValueToOutputStream extends AbstractJacksonTestCase {
+
+    /**
+     * Tests that data can be succesfully written to an output stream and read from the stream
+     *
+     * @param json Generated random JSON data
+     * @throws Exception If the underlying test throws an unexpected exception
+     */
     @Property
     public void writeValueToStream(
             @From(ComplexJSONGenerator.class) AbstractUnitTestCase.ComplexJSON json
     ) throws Exception {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        OutputStream stream = new ByteArrayOutputStream();
         ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper.ObjectMapper();
         mapper.writeValue(stream, json);
 
-        ComplexJSON deserializedJSON = mapper.readValue(stream.toString(), ComplexJSON.class);
-        assertEquals(json, deserializedJSON);
+        ComplexJSON deSerializedJSON = mapper.readValue(stream.toString(), ComplexJSON.class);
+        assertEquals(json, deSerializedJSON);
     }
 }

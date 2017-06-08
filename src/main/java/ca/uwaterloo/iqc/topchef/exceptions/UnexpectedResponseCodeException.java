@@ -6,13 +6,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 /**
  * Thrown if an HTTP request to the TopChef API results in an unexpected response code.
  */
-public final class UnexpectedResponseCodeException extends Exception {
-    /**
-     * Default constructor
-     */
-    public UnexpectedResponseCodeException(){
-        super();
-    }
+public final class UnexpectedResponseCodeException extends HTTPException {
 
     /**
      *

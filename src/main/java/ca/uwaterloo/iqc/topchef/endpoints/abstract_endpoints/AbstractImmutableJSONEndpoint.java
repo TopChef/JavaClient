@@ -91,9 +91,11 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      * @throws InternalServerErrorException For HTTP status code 500
      * @throws NoContentException For HTTP status code 204
      * @throws IOException If the HTTP status code could not be retrieved
+     * @throws UnexpectedResponseCodeException If an Unexpected Response code is received
      */
     private void assertGoodResponseCode(URLConnection connection) throws MethodNotAllowedException,
-            ResourceNotFoundException, InternalServerErrorException, NoContentException, IOException {
+            ResourceNotFoundException, InternalServerErrorException, NoContentException, IOException,
+            UnexpectedResponseCodeException {
         HTTPResponseCode code = connection.getResponseCode();
 
         switch (code) {
@@ -105,6 +107,8 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
                 throw new InternalServerErrorException();
             case NO_CONTENT:
                 throw new NoContentException();
+            default:
+                throw new UnexpectedResponseCodeException(code, connection);
         }
     }
 

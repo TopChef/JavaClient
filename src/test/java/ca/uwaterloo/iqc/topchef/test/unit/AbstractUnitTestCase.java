@@ -134,7 +134,7 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
                 new URL(baseURLString);
             } catch (MalformedURLException error){
                 log.error("Attempting to generate random data threw error", error);
-                throw new RuntimeException(error);
+                throw new IllegalStateException(error);
             }
 
             return baseURLString;

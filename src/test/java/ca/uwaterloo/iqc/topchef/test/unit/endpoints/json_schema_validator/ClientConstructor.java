@@ -7,6 +7,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Contains unit tests for
  * {@link ca.uwaterloo.iqc.topchef.endpoints.JSONSchemaValidator#JSONSchemaValidator(Client)}
@@ -21,7 +23,7 @@ public final class ClientConstructor extends AbstractJSONSchemaValidatorTestCase
     @Test
     public void clientConstructor(){
         context.checking(new ExpectationsForTest());
-        new JSONSchemaValidator(mockClient);
+        assertNotNull(new JSONSchemaValidator(mockClient));
         context.assertIsSatisfied();
     }
 

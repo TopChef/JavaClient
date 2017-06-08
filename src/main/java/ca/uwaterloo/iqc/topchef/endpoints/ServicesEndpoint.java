@@ -98,12 +98,12 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
         return getServiceByUUID(UUID.fromString(serviceID));
     }
 
-    private static URLConnection openConnectionForGettingServices(URL url) throws IOException, RuntimeException {
+    private static URLConnection openConnectionForGettingServices(URL url) throws IOException, ClassCastException {
         URLConnection connection;
         try {
             connection = url.openConnection();
         } catch (HTTPConnectionCastException error){
-            throw new RuntimeException(error);
+            throw new ClassCastException("Unable to cast connection to HTTP connection");
         }
 
         connection.setDoOutput(Boolean.FALSE);

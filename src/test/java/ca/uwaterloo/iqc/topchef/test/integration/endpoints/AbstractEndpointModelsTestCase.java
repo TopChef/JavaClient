@@ -23,7 +23,7 @@ public abstract class AbstractEndpointModelsTestCase extends AbstractIntegration
             client = new TopChefClient("http://localhost:5000");
         } catch (MalformedURLException error) {
             log.error("Bad URL for integration test", error);
-            throw new RuntimeException(error);
+            throw new IllegalStateException(error);
         }
     }
 }

@@ -38,12 +38,25 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnitQuickcheck.class)
 public final class GetServices extends AbstractServicesEndpointTestCase {
 
+    /**
+     * A mapper capable of marshalling and un-marshalling objects to JSON
+     */
     private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
 
+    /**
+     * A catcher to check if an exception is thrown, to be employed in tests where we test for
+     * an exception to be thrown
+     */
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
 
+    /**
+     *
+     * @param response A stubbed-out, randomly-generated "response" which
+     *                 contains a list of fake services and fake data
+     * @throws Exception If the test throws an exception for whatever reason
+     */
     @Property
     public void getServicesHappyPath(
             @From(ServiceListResponseGenerator.class) ServicesEndpoint.ServiceListResponse response
@@ -66,6 +79,13 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
         context.assertIsSatisfied();
     }
 
+    /**
+     *
+     * Tests that {@link IOException} is thrown if a response other than
+     * {@link HTTPResponseCode#OK} is returned by the server
+     *
+     * @throws Exception If an exception is thrown
+     */
     @Test
     public void getServicesBadResponseCode() throws Exception {
         Mockery context = new Mockery();
@@ -81,6 +101,12 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
 
     }
 
+    /**
+     * Tests that a {@link ClassCastException} is thrown if the {@link URLConnection} is not
+     * an HTTP connection
+     *
+     * @throws Exception If the underlying test throws an exception
+     */
     @Test
     public void getServicesCastExceptionThrown() throws Exception {
         Mockery context = new Mockery();
@@ -89,13 +115,18 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
         context.checking(new ExpectationsForCastError(mocks));
 
         Services services = new ServicesEndpoint(mocks.getClient());
-        expectedException.expect(RuntimeException.class);
+        expectedException.expect(ClassCastException.class);
 
         services.getServices();
 
         context.assertIsSatisfied();
     }
 
+    /**
+     * Iterate throught the list of services and check that the UUIDs of each service match
+     * @param response The mock response
+     * @param services The response returned by the endpoint that is to be checked
+     */
     private static void assertResponseIDsEqualServiceIDs(ServicesEndpoint.ServiceListResponse response, List<Service>
             services){
         Service service;
@@ -152,8 +183,18 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
             expectationsForConnection(mockConnectionToServices);
         }
 
+        /**
+         *
+         * @param connection A mock implementation of a connection
+         * @throws Exception If the mock method has a possibility of throwing an exception
+         */
         protected abstract void expectationsForConnection(URLConnection connection) throws Exception;
 
+        /**
+         *
+         * @param serviceURL A mock URL for the ``/services`` endpoint of the TopChef API
+         * @throws Exception If the mock method has a possibility of throwing an exception
+         */
         protected abstract void expectationsForServiceURL(URL serviceURL) throws Exception;
     }
 
