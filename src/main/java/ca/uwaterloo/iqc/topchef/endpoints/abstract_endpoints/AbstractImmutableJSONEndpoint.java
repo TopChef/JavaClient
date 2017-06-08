@@ -108,7 +108,6 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
             case NO_CONTENT:
                 throw new NoContentException();
             default:
-                throw new UnexpectedResponseCodeException(code, connection);
         }
     }
 
