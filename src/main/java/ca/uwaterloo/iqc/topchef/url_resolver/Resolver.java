@@ -13,10 +13,13 @@ import java.util.UUID;
 public class Resolver implements URLResolver {
 
     /**
-     * The log to which
+     * The log to which messages will be written
      */
     private static final Logger log = LoggerFactory.getLogger(Resolver.class);
 
+    /**
+     * The endpoint to the root endpoint of the TopChef API.
+     */
     private final URL baseURL;
 
     /**
@@ -42,12 +45,7 @@ public class Resolver implements URLResolver {
      */
     @Override
     public URL getValidatorEndpoint() throws IllegalStateException {
-        try {
-            return this.baseURL.getRelativeURL("/validator");
-        } catch (MalformedURLException error) {
-            log.error("Joining URLs threw unexpected exception", error);
-            throw new IllegalStateException(error);
-        }
+        return safeGetRelativeURL(this.baseURL, "/validator");
     }
 
     /**
@@ -59,12 +57,7 @@ public class Resolver implements URLResolver {
      */
     @Override
     public URL getServicesEndpoint() throws IllegalStateException {
-        try {
-            return this.baseURL.getRelativeURL("/services");
-        } catch (MalformedURLException error) {
-            log.error("Joining URLs threw unexpected exception", error);
-            throw new IllegalStateException(error);
-        }
+        return safeGetRelativeURL(this.baseURL, "/services");
     }
 
     /**
@@ -75,12 +68,7 @@ public class Resolver implements URLResolver {
      */
     @Override
     public URL getServiceEndpoint(UUID service) throws IllegalStateException {
-        try {
-            return this.baseURL.getRelativeURL(String.format("/services/%s", service.toString()));
-        } catch (MalformedURLException error) {
-            log.error("Joining URLs threw unexpected exception", error);
-            throw new IllegalStateException(error);
-        }
+        return safeGetRelativeURL(this.baseURL, String.format("/services/%s", service.toString()));
     }
 
     /**
@@ -93,5 +81,42 @@ public class Resolver implements URLResolver {
     @Override
     public URL getServiceEndpoint(String service) throws IllegalStateException, IllegalArgumentException {
         return this.getServiceEndpoint(UUID.fromString(service));
+    }
+
+    /**
+     *
+     * @param serviceID The ID of the service
+     * @return The URL for the queue
+     * @throws IllegalStateException If the appended URL is not a URL
+     */
+    @Override
+    public URL getQueueEndpointForService(UUID serviceID) throws IllegalStateException {
+        return safeGetRelativeURL(this.baseURL, String.format("/services/%s/queue", serviceID.toString()));
+    }
+
+    @Override
+    public URL getJobsEndpointForService(UUID serviceID) throws IllegalStateException {
+        return safeGetRelativeURL(this.baseURL, String.format("/services/%s/jobs", serviceID.toString()));
+    }
+
+    @Override
+    public URL getJobEndpoint(UUID jobID) throws IllegalStateException {
+        return safeGetRelativeURL(this.baseURL, String.format("/jobs/%s", jobID.toString()));
+    }
+
+    /**
+     *
+     * @param baseURL The url to which the text for the relative URL is to be appended
+     * @param appendedURL The stuff to append to the URL
+     * @return The new URL, formed by appending the two URLs together
+     * @throws IllegalStateException if the resulting URLs cannot be formed
+     */
+    private static URL safeGetRelativeURL(URL baseURL, String appendedURL) throws IllegalStateException {
+        try {
+            return baseURL.getRelativeURL(appendedURL);
+        } catch (MalformedURLException error) {
+            log.error("Joining URLs threw unexpected exception", error);
+            throw new IllegalStateException(error);
+        }
     }
 }

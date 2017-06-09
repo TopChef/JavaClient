@@ -1,6 +1,7 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
 import ca.uwaterloo.iqc.topchef.Client;
+import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
@@ -8,17 +9,22 @@ import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSON
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import lombok.Cleanup;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Describes an endpoint with service data, to which jobs can be submitted
  */
 public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Service {
+    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
+            .wrapper.ObjectMapper();
+
     /**
      * The UUID of this service, used to uniquely refer to this service
      *
@@ -30,12 +36,19 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
     private final UUID serviceID;
 
     /**
+     * The client used to access the TopChef API
+     */
+    private final Client client;
+
+    /**
      *
      * @param client The client under which this service was created
      * @param id The service ID
      */
     public ServiceEndpoint(Client client, UUID id){
         super(client.getURLResolver().getServiceEndpoint(id));
+
+        this.client = client;
         this.serviceID = id;
     }
 
@@ -46,8 +59,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
      * @throws IllegalArgumentException If the string provided is not a valid UUID
      */
     public ServiceEndpoint(Client client, String id) throws IllegalArgumentException {
-        super(client.getURLResolver().getServiceEndpoint(UUID.fromString(id)));
-        this.serviceID = UUID.fromString(id);
+        this(client, UUID.fromString(id));
     }
 
     /**
@@ -73,6 +85,17 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         assertGoodResponseCode(connection);
     }
 
+    @Override
+    public List<Job> getJobs() throws HTTPException, IOException {
+        @Cleanup URLConnection connection = getConnectionForGettingJobs(this.client, this.serviceID);
+        connection.connect();
+        assertGoodResponseCode(connection);
+        return readResponseFromJobsEndpoint(
+                mapper.readValue(connection.getInputStream(), JobsEndpointResponse.class),
+                client
+        );
+    }
+
     /**
      *
      * @return The data from running a GET request to /services/(service_id)
@@ -91,18 +114,40 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
      * @throws IOException If the connection cannot be opened
      */
     private static URLConnection getPatchRequestForCheckIn(URL url) throws IOException {
-        URLConnection connection;
-
-        try {
-            connection = url.openConnection();
-        } catch (HTTPConnectionCastException error){
-            throw new IOException("Could not cast connection to an HTTP connection");
-        }
-
+        URLConnection connection = openURLConnection(url);
         connection.setRequestMethod(HTTPRequestMethod.PATCH);
         connection.setDoOutput(Boolean.FALSE);
 
         return connection;
+    }
+
+    private static URLConnection getConnectionForGettingJobs(Client client, UUID serviceID) throws IOException {
+        URL jobsURL = client.getURLResolver().getJobsEndpointForService(serviceID);
+        URLConnection connection = openURLConnection(jobsURL);
+
+        connection.setDoOutput(Boolean.FALSE);
+        connection.setRequestMethod(HTTPRequestMethod.GET);
+        connection.setRequestProperty("Content-Type", "application/json");
+        return connection;
+    }
+
+    private static URLConnection openURLConnection(URL url) throws IOException {
+        try {
+            return url.openConnection();
+        } catch (HTTPConnectionCastException error){
+            throw new IOException("Could not cast connection to an HTTP connection");
+        }
+    }
+
+    private static List<Job> readResponseFromJobsEndpoint(JobsEndpointResponse response, Client client){
+        List<Job> jobList = new LinkedList<Job>();
+        List<JobsEndpointData> jobsEndpointData = response.getData();
+
+        for (JobsEndpointData data: jobsEndpointData){
+            jobList.add(new JobEndpoint(client, data.id));
+        }
+
+        return jobList;
     }
 
     /**
@@ -120,5 +165,29 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         @Getter
         @Setter
         private Object job_registration_schema;
+    }
+
+    public static class JobsEndpointResponse {
+        @Getter
+        @Setter
+        private Object meta;
+
+        @Getter
+        @Setter
+        private List<JobsEndpointData> data;
+    }
+
+    public static class JobsEndpointData {
+        @Getter
+        @Setter
+        private Date dateSubmitted;
+
+        @Getter
+        @Setter
+        private String id;
+
+        @Getter
+        @Setter
+        private String status;
     }
 }

@@ -4,6 +4,7 @@ import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.ImmutableJSONEndpoi
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,4 +29,6 @@ public interface Service extends ImmutableJSONEndpoint {
      * Let the server know that this service is still alive
      */
     void checkIn() throws HTTPException, IOException;
+
+    List<Job> getJobs() throws HTTPException, IOException;
 }
