@@ -76,7 +76,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      * @throws IOException If the HTTP status code could not be retrieved
      * @throws UnexpectedResponseCodeException If an Unexpected Response code is received
      */
-    private void assertGoodResponseCode(URLConnection connection) throws MethodNotAllowedException,
+    protected static void assertGoodResponseCode(URLConnection connection) throws MethodNotAllowedException,
             ResourceNotFoundException, InternalServerErrorException, NoContentException, IOException,
             UnexpectedResponseCodeException {
         HTTPResponseCode code = connection.getResponseCode();

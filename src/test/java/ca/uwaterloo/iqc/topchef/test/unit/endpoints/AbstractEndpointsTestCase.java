@@ -5,5 +5,5 @@ import ca.uwaterloo.iqc.topchef.test.unit.AbstractUnitTestCase;
 /**
  * Base class for all tests of {@link ca.uwaterloo.iqc.topchef.endpoints}
  */
-public abstract class AbstractEndpointModelsTestCase extends AbstractUnitTestCase {
+public abstract class AbstractEndpointsTestCase extends AbstractUnitTestCase {
 }

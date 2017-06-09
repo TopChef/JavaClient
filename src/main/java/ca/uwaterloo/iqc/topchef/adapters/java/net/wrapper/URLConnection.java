@@ -123,6 +123,8 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
                 return HTTPResponseCode.METHOD_NOT_ALLOWED;
             case HttpURLConnection.HTTP_INTERNAL_ERROR:
                 return HTTPResponseCode.INTERNAL_SERVER_ERROR;
+            case 418:
+                return HTTPResponseCode.IM_A_TEAPOT;
             default:
                 return HTTPResponseCode.INTERNAL_SERVER_ERROR;
         }

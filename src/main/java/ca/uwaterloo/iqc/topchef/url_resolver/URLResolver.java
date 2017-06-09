@@ -30,4 +30,10 @@ public interface URLResolver {
     URL getServiceEndpoint(UUID serviceID);
 
     URL getServiceEndpoint(String serviceID);
+
+    URL getQueueEndpointForService(UUID serviceID);
+
+    URL getJobsEndpointForService(UUID serviceID);
+
+    URL getJobEndpoint(UUID jobID);
 }

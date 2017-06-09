@@ -19,5 +19,5 @@ package ca.uwaterloo.iqc.topchef.adapters.java.net;
  */
 public enum HTTPResponseCode {
     OK, CREATED, ACCEPTED, NO_CONTENT, BAD_REQUEST, NOT_FOUND,
-    METHOD_NOT_ALLOWED, INTERNAL_SERVER_ERROR
+    METHOD_NOT_ALLOWED, INTERNAL_SERVER_ERROR, IM_A_TEAPOT
 }

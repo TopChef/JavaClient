@@ -17,7 +17,7 @@ import org.junit.rules.ExpectedException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Contains unit tests for {@link AbstractImmutableJSONEndpoint#getJSON()}

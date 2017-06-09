@@ -6,6 +6,7 @@ import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.generator.java.lang.AbstractStringGenerator;
 import com.pholser.junit.quickcheck.generator.java.lang.StringGenerator;
+import com.pholser.junit.quickcheck.generator.java.util.RFC4122;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import lombok.Data;
 import org.jetbrains.annotations.Contract;
@@ -283,15 +284,8 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
         }
     }
 
-    protected static final class UUIDGenerator extends Generator<UUID>{
-        public UUIDGenerator(){
-            super(UUID.class);
-        }
-
-        @NotNull
-        @Override
-        public UUID generate(SourceOfRandomness rng, GenerationStatus status){
-            return UUID.randomUUID();
-        }
-    }
+    /**
+     * UUID generator
+     */
+    public static final class UUIDGenerator extends RFC4122.Version4 {}
 }
