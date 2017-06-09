@@ -40,13 +40,8 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
     @Override
     public void checkIn() throws HTTPException, IOException {
         @Cleanup URLConnection connection = getPatchRequestForCheckIn(this.getURL());
-
-        try {
-            connection.connect();
-            assertGoodResponseCode(connection);
-        } finally {
-            connection.disconnect();
-        }
+        connection.connect();
+        assertGoodResponseCode(connection);
     }
 
     private ServiceData getServiceData() throws IOException, HTTPException {

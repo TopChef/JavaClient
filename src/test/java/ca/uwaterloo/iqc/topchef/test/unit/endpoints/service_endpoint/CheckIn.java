@@ -93,7 +93,7 @@ public final class CheckIn extends AbstractServiceEndpointTestCase {
             will(returnValue(HTTPResponseCode.OK));
 
             oneOf(connection).connect();
-            oneOf(connection).disconnect();
+            oneOf(connection).close();
             oneOf(connection).setRequestMethod(HTTPRequestMethod.PATCH);
             oneOf(connection).setDoOutput(Boolean.FALSE);
         }

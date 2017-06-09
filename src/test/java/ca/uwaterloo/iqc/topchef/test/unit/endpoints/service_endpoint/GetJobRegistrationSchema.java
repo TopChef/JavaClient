@@ -64,7 +64,7 @@ public final class GetJobRegistrationSchema extends AbstractServiceEndpointTestC
 
         private void setUpConnection(URLConnection connection) throws Exception {
             oneOf(connection).connect();
-            oneOf(connection).disconnect();
+            oneOf(connection).close();
             oneOf(connection).setRequestMethod(HTTPRequestMethod.GET);
             oneOf(connection).setRequestProperty("Content-Type", "application/json");
             oneOf(connection).setDoOutput(Boolean.FALSE);
