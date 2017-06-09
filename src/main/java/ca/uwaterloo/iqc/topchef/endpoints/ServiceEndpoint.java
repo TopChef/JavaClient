@@ -7,6 +7,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
+import lombok.Cleanup;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
 
     @Override
     public void checkIn() throws HTTPException, IOException {
-        URLConnection connection = getPatchRequestForCheckIn(this.getURL());
+        @Cleanup URLConnection connection = getPatchRequestForCheckIn(this.getURL());
 
         try {
             connection.connect();
@@ -58,7 +59,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         try {
             connection = url.openConnection();
         } catch (HTTPConnectionCastException error){
-            throw new ClassCastException("Could not cast connection to an HTTP connection");
+            throw new IOException("Could not cast connection to an HTTP connection");
         }
 
         connection.setRequestMethod(HTTPRequestMethod.PATCH);
@@ -67,8 +68,6 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return connection;
     }
 
-
-    @EqualsAndHashCode
     public static class ServiceData {
         @Getter
         @Setter
