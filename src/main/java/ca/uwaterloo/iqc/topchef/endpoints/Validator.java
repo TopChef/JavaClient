@@ -15,7 +15,7 @@ public interface Validator extends Endpoint {
      * @param schema The schema against which the object is to be validated
      * @return {@link Boolean#TRUE} if the object validates
      */
-    Boolean validate(Object object, Object schema) throws IOException, UnexpectedResponseCodeException;
+    <I, S> Boolean validate(I object, S schema) throws IOException, UnexpectedResponseCodeException;
 
     /**
      *

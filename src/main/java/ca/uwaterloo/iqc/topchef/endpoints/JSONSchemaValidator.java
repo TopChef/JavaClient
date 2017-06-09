@@ -43,16 +43,18 @@ public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements 
      *
      * @param instance The JSON object to be validated
      * @param schema The schema against which the object is to be validated
+     * @param <I> The type of the instance to be validated
+     * @param <S> The type of the schema to be validated
      * @return {@link Boolean#TRUE} if the instance matches the schema, otherwise {@link Boolean#FALSE}
      * @throws IOException If I/O cannot be established with the TopChef API
      * @throws UnexpectedResponseCodeException if the response code is not {@link HTTPResponseCode#OK} and
      * {@link HTTPResponseCode#BAD_REQUEST}
      */
     @Override
-    public Boolean validate(Object instance, Object schema) throws IOException, UnexpectedResponseCodeException {
+    public <I, S> Boolean validate(I instance, S schema) throws IOException, UnexpectedResponseCodeException {
         URLConnection connection = openConnection();
 
-        ValidationRequest request = new ValidationRequest();
+        ValidationRequest<I, S> request = new ValidationRequest<I, S>();
         request.setSchema(schema);
         request.setObject(instance);
 
@@ -72,7 +74,7 @@ public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements 
     public Boolean validate(String instance, String schema) throws IOException, UnexpectedResponseCodeException {
         URLConnection connection = openConnection();
 
-        ValidationRequest request = new ValidationRequest();
+        ValidationRequest<Object, Object> request = new ValidationRequest<Object, Object>();
         request.setSchema(jsonMapper.readValue(schema));
         request.setObject(jsonMapper.readValue(instance));
 
@@ -142,21 +144,23 @@ public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements 
     }
 
     /**
-     * A representation of the JSON to be sent to the validator via a POST request
+     *
+     * @param <I> The type of the object that is to be checked against a schema
+     * @param <S> The type of the schema that will check the object
      */
-    private static final class ValidationRequest {
+    private static final class ValidationRequest<I, S> {
         /**
          * The instance to check
          */
         @Getter
         @Setter
-        private Object object;
+        private I object;
 
         /**
          * The desired schema
          */
         @Getter
         @Setter
-        private Object schema;
+        private S schema;
     }
 }
