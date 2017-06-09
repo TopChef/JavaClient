@@ -3,16 +3,23 @@ package ca.uwaterloo.iqc.topchef.endpoints;
 import ca.uwaterloo.iqc.topchef.Client;
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
+import com.github.dmstocking.optional.java.util.Optional;
 import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +29,8 @@ import java.util.UUID;
  * Describes an endpoint with service data, to which jobs can be submitted
  */
 public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Service {
+    private static final Logger log = LoggerFactory.getLogger(ServiceEndpoint.class);
+
     private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
 
@@ -96,6 +105,39 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         );
     }
 
+    @Override
+    public Optional<Job> getNextJob() throws HTTPException, IOException {
+        Optional<Job> nextJob;
+
+        @Cleanup URLConnection connection = getConnectionForGettingNextJob(this.client, this.serviceID);
+        connection.connect();
+        HTTPResponseCode code = connection.getResponseCode();
+
+        if (code == HTTPResponseCode.NO_CONTENT) {
+            nextJob = Optional.empty();
+        } else {
+            nextJob = getNextJobFromResponse(connection.getInputStream());
+        }
+
+        return nextJob;
+    }
+
+    @NotNull
+    private Optional<Job> getNextJobFromResponse(InputStream serverResponse) throws IOException {
+        JobsEndpointResponse response = mapper.readValue(serverResponse, JobsEndpointResponse.class);
+        JobsEndpointData firstJobFromResponse;
+
+        try {
+            firstJobFromResponse = response.getData().get(0);
+        } catch (IndexOutOfBoundsException error) {
+            log.warn("Index exception thrown. Assuming that no next job exists in the queue", error);
+            return Optional.empty();
+        }
+
+        Job job = new JobEndpoint(client, firstJobFromResponse.getId());
+        return Optional.of(job);
+    }
+
     /**
      *
      * @return The data from running a GET request to /services/(service_id)
@@ -123,7 +165,16 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
 
     private static URLConnection getConnectionForGettingJobs(Client client, UUID serviceID) throws IOException {
         URL jobsURL = client.getURLResolver().getJobsEndpointForService(serviceID);
-        URLConnection connection = openURLConnection(jobsURL);
+        return openURLConnectionForJSONGet(jobsURL);
+    }
+
+    private static URLConnection getConnectionForGettingNextJob(Client client, UUID serviceID) throws IOException {
+        URL queueURL = client.getURLResolver().getQueueEndpointForService(serviceID);
+        return openURLConnectionForJSONGet(queueURL);
+    }
+
+    private static URLConnection openURLConnectionForJSONGet(URL url) throws IOException {
+        URLConnection connection = openURLConnection(url);
 
         connection.setDoOutput(Boolean.FALSE);
         connection.setRequestMethod(HTTPRequestMethod.GET);
