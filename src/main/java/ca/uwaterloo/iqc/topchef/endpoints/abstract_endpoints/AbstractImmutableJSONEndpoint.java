@@ -6,6 +6,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.*;
+import lombok.Cleanup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,18 +58,11 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      */
     @Override
     public <T> T getJSON(Class<T> desiredType) throws IOException, HTTPException {
-        URLConnection connection = openConnection(this.getURL());
+        @Cleanup URLConnection connection = openConnection(this.getURL());
         configureConnectionForJSONGet(connection);
-
         connection.connect();
-
         assertGoodResponseCode(connection);
-
-        try {
-            return mapper.readValue(connection.getInputStream(), desiredType);
-        } finally {
-            connection.disconnect();
-        }
+        return mapper.readValue(connection.getInputStream(), desiredType);
     }
 
     /**

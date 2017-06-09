@@ -42,7 +42,7 @@ public final class Connect extends AbstractURLConnectionTestCase {
      */
     @After
     public void disconnect(){
-        connection.disconnect();
+        connection.close();
     }
 
     /**

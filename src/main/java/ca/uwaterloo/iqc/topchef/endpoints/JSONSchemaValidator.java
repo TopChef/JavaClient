@@ -96,7 +96,7 @@ public class JSONSchemaValidator extends AbstractMutableJSONEndpoint implements 
             jsonMapper.writeValue(connection.getOutputStream(), request);
             return processResponseCode(connection.getResponseCode());
         } finally {
-            connection.disconnect();
+            connection.close();
         }
     }
 

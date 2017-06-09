@@ -137,7 +137,7 @@ public final class GetJSONasType extends AbstractImmutableJSONEndpointTestCase {
             will(returnValue(mocks.getConnection()));
 
             oneOf(mocks.getConnection()).connect();
-            oneOf(mocks.getConnection()).disconnect();
+            oneOf(mocks.getConnection()).close();
             oneOf(mocks.getConnection()).setDoOutput(Boolean.FALSE);
             oneOf(mocks.getConnection()).setRequestMethod(HTTPRequestMethod.GET);
             oneOf(mocks.getConnection()).setRequestProperty("Content-Type", "application/json");
