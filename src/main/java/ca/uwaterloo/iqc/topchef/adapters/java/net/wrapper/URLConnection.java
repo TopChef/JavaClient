@@ -165,7 +165,7 @@ public final class URLConnection implements ca.uwaterloo.iqc.topchef.adapters.ja
      * Close the connection
      */
     @Override
-    public void disconnect(){
+    public void close(){
         this.connection.disconnect();
     }
 

@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Contains unit tests for {@link URLConnection#disconnect()}
+ * Contains unit tests for {@link URLConnection#close()}
  */
-public final class Disconnect extends AbstractURLConnectionTestCase {
-    private static final Logger log = LoggerFactory.getLogger(Disconnect.class);
+public final class Close extends AbstractURLConnectionTestCase {
+    private static final Logger log = LoggerFactory.getLogger(Close.class);
 
     @Before
     public void setUpConnection(){
@@ -25,6 +25,6 @@ public final class Disconnect extends AbstractURLConnectionTestCase {
 
     @Test
     public void disconnect(){
-        connection.disconnect();
+        connection.close();
     }
 }
