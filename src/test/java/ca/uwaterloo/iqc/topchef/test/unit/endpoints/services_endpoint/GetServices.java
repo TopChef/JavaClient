@@ -180,7 +180,7 @@ public final class GetServices extends AbstractServicesEndpointTestCase {
         @Override
         public void expectationsForConnection(URLConnection connection) throws Exception {
             oneOf(connection).connect();
-            oneOf(connection).disconnect();
+            oneOf(connection).close();
 
             oneOf(connection).setDoOutput(Boolean.FALSE);
             oneOf(connection).setRequestMethod(HTTPRequestMethod.GET);

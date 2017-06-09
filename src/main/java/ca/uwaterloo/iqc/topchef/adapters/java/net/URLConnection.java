@@ -3,6 +3,7 @@ package ca.uwaterloo.iqc.topchef.adapters.java.net;
 import com.github.dmstocking.optional.java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +12,7 @@ import java.net.ProtocolException;
 /**
  * Describes the contract for a URL connection
  */
-public interface URLConnection {
+public interface URLConnection extends Closeable {
 
     /**
      * @return The request method that this connection is making
@@ -81,5 +82,5 @@ public interface URLConnection {
     /**
      * Close the connection
      */
-    void disconnect();
+    void close();
 }

@@ -87,7 +87,7 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             oneOf(mockConnection).setRequestProperty("Content-Type", "application/json");
             oneOf(mockConnection).setRequestMethod(HTTPRequestMethod.GET);
             oneOf(mockConnection).setDoOutput(Boolean.FALSE);
-            oneOf(mockConnection).disconnect();
+            oneOf(mockConnection).close();
 
             setExpectationsForResponseCode();
             setExpectationsForInputStream();
@@ -120,7 +120,7 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             oneOf(mockConnection).getResponseCode();
             will(returnValue(HTTPResponseCode.NOT_FOUND));
 
-            oneOf(mockConnection).disconnect();
+            oneOf(mockConnection).close();
         }
     }
 }

@@ -71,7 +71,7 @@ public final class ValidateStrings extends AbstractJSONSchemaValidatorTestCase {
 
             expectationsForConnectionConfiguring();
             oneOf(mockConnection).connect();
-            oneOf(mockConnection).disconnect();
+            oneOf(mockConnection).close();
 
             oneOf(mockConnection).getOutputStream();
             will(returnValue(mockOutputstream));
