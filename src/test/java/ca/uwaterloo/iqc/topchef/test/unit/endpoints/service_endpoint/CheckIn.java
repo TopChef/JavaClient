@@ -13,14 +13,12 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 /**

@@ -7,17 +7,15 @@ import lombok.Getter;
 import java.util.UUID;
 
 /**
- * Created by mkononen on 09/06/17.
+ * Basic stub endpoint for a job. This will become much better.
  */
 public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job {
-    private final Client client;
 
     @Getter
     private final UUID ID;
 
     public JobEndpoint(Client client, UUID jobId){
         super(client.getURLResolver().getJobEndpoint(jobId));
-        this.client = client;
         this.ID = jobId;
     }
 

@@ -1,6 +1,5 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.service_endpoint;
 
-import ca.uwaterloo.iqc.topchef.Client;
 import ca.uwaterloo.iqc.topchef.endpoints.Service;
 import ca.uwaterloo.iqc.topchef.endpoints.ServiceEndpoint;
 import com.pholser.junit.quickcheck.From;
