@@ -29,7 +29,7 @@ public final class GetJobRegistrationSchema extends AbstractServiceEndpointTestC
     @Property
     public void getSchema(
             @From(UUIDGenerator.class) UUID serviceID,
-            @From(ServiceDataGenerator.class) ServiceEndpoint.ServiceData data
+            @From(ResponseGenerator.class) ServiceEndpoint.ServicesResponse data
     ) throws Exception {
         Mockery context = new Mockery();
         MockPackage mocks = new MockPackage(context);
@@ -39,7 +39,7 @@ public final class GetJobRegistrationSchema extends AbstractServiceEndpointTestC
 
         Service service = new ServiceEndpoint(mocks.getClient(), serviceID);
 
-        assertEquals(data.getJob_registration_schema(), service.getJobRegistrationSchema());
+        assertEquals(data.getData().getJob_registration_schema(), service.getJobRegistrationSchema());
 
         context.assertIsSatisfied();
 

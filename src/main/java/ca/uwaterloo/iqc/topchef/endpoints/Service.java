@@ -20,6 +20,14 @@ public interface Service extends ImmutableJSONEndpoint {
 
     /**
      *
+     * @return The name of the service
+     * @throws IOException If the server cannot be contacted
+     * @throws HTTPException If the server does something weird
+     */
+    String getName() throws HTTPException, IOException;
+
+    /**
+     *
      * @return The schema that must be valid before a job can be posted to the API
      * @throws IOException If the server cannot be contacted
      * @throws HTTPException If the server does something weird
@@ -48,4 +56,8 @@ public interface Service extends ImmutableJSONEndpoint {
      * @throws HTTPException If the server does something weird
      */
     Optional<Job> getNextJob() throws HTTPException, IOException;
+
+    Boolean hasTimedOut() throws HTTPException, IOException;
+
+    <T extends Service> Boolean equals(T other);
 }

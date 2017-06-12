@@ -26,6 +26,21 @@ import java.util.UUID;
  * Base class for unit tests of {@link ca.uwaterloo.iqc.topchef.endpoints.ServiceEndpoint}
  */
 public abstract class AbstractServiceEndpointTestCase extends AbstractEndpointsTestCase {
+    protected static final class ResponseGenerator extends Generator<ServiceEndpoint.ServicesResponse> {
+        private static final ServiceDataGenerator dataGenerator = new ServiceDataGenerator();
+
+        public ResponseGenerator(){
+            super(ServiceEndpoint.ServicesResponse.class);
+        }
+
+        @Override
+        public ServiceEndpoint.ServicesResponse generate(SourceOfRandomness rng, GenerationStatus status){
+            ServiceEndpoint.ServicesResponse response = new ServiceEndpoint.ServicesResponse();
+            response.setData(dataGenerator.generate(rng, status));
+            return response;
+        }
+    }
+
     protected static final class ServiceDataGenerator extends Generator<ServiceEndpoint.ServiceData> {
         private static final Generator<String> stringGenerator = new StringGenerator();
 
@@ -85,7 +100,7 @@ public abstract class AbstractServiceEndpointTestCase extends AbstractEndpointsT
             ServiceEndpoint.JobsEndpointData data = new ServiceEndpoint.JobsEndpointData();
 
             data.setId(uuidGenerator.generate(rng, status).toString());
-            data.setDateSubmitted(dateGenerator.generate(rng, status));
+            data.setDate_submitted(dateGenerator.generate(rng, status).toString());
             data.setStatus("REGISTERED");
 
             return data;
