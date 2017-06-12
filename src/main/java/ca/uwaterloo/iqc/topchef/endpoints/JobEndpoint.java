@@ -9,6 +9,7 @@ import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSON
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import lombok.Cleanup;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -139,6 +140,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         private JobDetails<P, R> data;
     }
 
+    @EqualsAndHashCode
     public static final class JobDetails<P, R> {
         @Getter
         @Setter

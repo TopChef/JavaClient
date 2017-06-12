@@ -1,6 +1,8 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.job_endpoint;
 
 import ca.uwaterloo.iqc.topchef.Client;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
@@ -14,10 +16,13 @@ import com.pholser.junit.quickcheck.generator.java.util.DateGenerator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import lombok.Getter;
 import lombok.Setter;
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,12 +48,17 @@ public abstract class AbstractJobEndpointTestCase extends AbstractEndpointsTestC
         @Setter
         private InputStream inputStream;
 
+        @Getter
+        @Setter
+        private OutputStream outputStream;
+
         public MockPackage(Mockery context){
             client = context.mock(Client.class);
             resolver = context.mock(URLResolver.class);
             url = context.mock(URL.class);
             connection = context.mock(URLConnection.class);
             inputStream = new ByteArrayInputStream("".getBytes());
+            outputStream = new ByteArrayOutputStream();
         }
     }
 
@@ -128,6 +138,56 @@ public abstract class AbstractJobEndpointTestCase extends AbstractEndpointsTestC
 
         public GenericResponseGenerator(){
             super(jobDetailsGenerator);
+        }
+    }
+
+    protected static abstract class ExpectationsForTests extends Expectations {
+        public ExpectationsForTests(MockPackage mocks, UUID jobID) throws Exception {
+            oneOf(mocks.getClient()).getURLResolver();
+            will(returnValue(mocks.getResolver()));
+
+            oneOf(mocks.getResolver()).getJobEndpoint(jobID);
+            will(returnValue(mocks.getUrl()));
+
+            oneOf(mocks.getUrl()).openConnection();
+            will(returnValue(mocks.getConnection()));
+
+            oneOf(mocks.getConnection()).setDoOutput(Boolean.FALSE);
+            oneOf(mocks.getConnection()).setRequestMethod(HTTPRequestMethod.GET);
+            oneOf(mocks.getConnection()).setRequestProperty("Content-Type", "application/json");
+            oneOf(mocks.getConnection()).connect();
+            oneOf(mocks.getConnection()).close();
+
+            oneOf(mocks.getConnection()).getInputStream();
+            will(returnValue(mocks.getInputStream()));
+
+            oneOf(mocks.getConnection()).getResponseCode();
+            will(returnValue(HTTPResponseCode.OK));
+        }
+    }
+
+    protected static abstract class ExpectationsForTestWithPut extends ExpectationsForTests {
+        public ExpectationsForTestWithPut(MockPackage mocks, UUID jobID) throws Exception {
+            super(mocks, jobID);
+
+            allowing(mocks.getUrl()).openConnection();
+            will(returnValue(mocks.getConnection()));
+
+            allowing(mocks.getConnection()).setRequestMethod(with(any(HTTPRequestMethod.class)));
+            allowing(mocks.getConnection()).setRequestProperty("Content-Type", "application/json");
+            allowing(mocks.getConnection()).setDoOutput(with(any(Boolean.class)));
+
+            allowing(mocks.getConnection()).getInputStream();
+            will(returnValue(mocks.getInputStream()));
+
+            allowing(mocks.getConnection()).getOutputStream();
+            will(returnValue(mocks.getOutputStream()));
+
+            allowing(mocks.getConnection()).connect();
+            allowing(mocks.getConnection()).close();
+
+            allowing(mocks.getConnection()).getResponseCode();
+            will(returnValue(HTTPResponseCode.OK));
         }
     }
 }

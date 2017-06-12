@@ -1,15 +1,11 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.job_endpoint;
 
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
-import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.runner.RunWith;
 
@@ -24,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnitQuickcheck.class)
 public final class GetParameters extends AbstractJobEndpointTestCase {
 
-    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
+    private final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
 
     @Property
@@ -45,28 +41,9 @@ public final class GetParameters extends AbstractJobEndpointTestCase {
         context.assertIsSatisfied();
     }
 
-    private static final class ExpectationsForGetParameters extends Expectations {
-        public ExpectationsForGetParameters(MockPackage mocks, UUID jobID) throws Exception {
-            oneOf(mocks.getClient()).getURLResolver();
-            will(returnValue(mocks.getResolver()));
-
-            oneOf(mocks.getResolver()).getJobEndpoint(jobID);
-            will(returnValue(mocks.getUrl()));
-
-            oneOf(mocks.getUrl()).openConnection();
-            will(returnValue(mocks.getConnection()));
-
-            oneOf(mocks.getConnection()).setDoOutput(Boolean.FALSE);
-            oneOf(mocks.getConnection()).setRequestMethod(HTTPRequestMethod.GET);
-            oneOf(mocks.getConnection()).setRequestProperty("Content-Type", "application/json");
-            oneOf(mocks.getConnection()).connect();
-            oneOf(mocks.getConnection()).close();
-
-            oneOf(mocks.getConnection()).getInputStream();
-            will(returnValue(mocks.getInputStream()));
-
-            oneOf(mocks.getConnection()).getResponseCode();
-            will(returnValue(HTTPResponseCode.OK));
+    private static final class ExpectationsForGetParameters extends ExpectationsForTests {
+        public ExpectationsForGetParameters(MockPackage mocks, UUID id) throws Exception {
+            super(mocks, id);
         }
     }
 }
