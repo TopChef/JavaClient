@@ -6,6 +6,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractMutableJSONEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.ImmutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPConnectionCastException;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import com.github.dmstocking.optional.java.util.Optional;
@@ -66,6 +67,11 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         this(client, UUID.fromString(id));
     }
 
+    @Override
+    public String getName() throws HTTPException, IOException {
+        return getServiceData().getName();
+    }
+
     /**
      *
      * @return The schema that must be matched in order to allow posting a new job
@@ -117,6 +123,16 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return nextJob;
     }
 
+    @Override
+    public Boolean hasTimedOut() throws HTTPException, IOException {
+        return getServiceData().getHas_timed_out();
+    }
+
+    @Override
+    public <T extends Service> Boolean equals(T other){
+        return this.getServiceID().equals(other.getServiceID());
+    }
+
     @NotNull
     private Optional<Job> getNextJobFromResponse(InputStream serverResponse) throws IOException {
         JobsEndpointResponse response = this.getMapper().readValue(serverResponse, JobsEndpointResponse.class);
@@ -140,7 +156,8 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
      * @throws IOException If I/O from this machine to the server does something weird
      */
     private ServiceData getServiceData() throws IOException, HTTPException {
-        return this.getJSON(ServiceData.class);
+        DataResponse<ServiceData, Object> response = this.getJSON(ServicesResponse.class);
+        return response.getData();
     }
 
     /**
@@ -196,6 +213,8 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return jobList;
     }
 
+    public static class ServicesResponse extends ImmutableJSONEndpoint.DataResponse<ServiceData, Object>{}
+
     /**
      * The template for the response JSON from a GET request to /services/(service_id)
      */
@@ -211,6 +230,22 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         @Getter
         @Setter
         private Object job_registration_schema;
+
+        @Getter
+        @Setter
+        private Boolean has_timed_out;
+
+        @Getter
+        @Setter
+        private UUID id;
+
+        @Getter
+        @Setter
+        private Object job_result_schema;
+
+        @Getter
+        @Setter
+        private String url;
     }
 
     public static class JobsEndpointResponse {
@@ -226,7 +261,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
     public static class JobsEndpointData {
         @Getter
         @Setter
-        private Date dateSubmitted;
+        private String date_submitted;
 
         @Getter
         @Setter

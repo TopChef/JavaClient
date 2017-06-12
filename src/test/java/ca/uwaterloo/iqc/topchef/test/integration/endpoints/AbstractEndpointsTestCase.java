@@ -20,7 +20,7 @@ public abstract class AbstractEndpointsTestCase extends AbstractIntegrationTestC
     @Before
     public void setBaseURL() throws RuntimeException {
         try {
-            client = new TopChefClient("http://localhost:5000");
+            client = new TopChefClient(apiUrl);
         } catch (MalformedURLException error) {
             log.error("Bad URL for integration test", error);
             throw new IllegalStateException(error);

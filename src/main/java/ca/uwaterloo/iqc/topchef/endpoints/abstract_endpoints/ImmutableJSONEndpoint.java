@@ -4,8 +4,11 @@ import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.RequiresJSON
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Describes an endpoint capable of getting JSON via an HTTP GET request
@@ -30,4 +33,34 @@ public interface ImmutableJSONEndpoint extends Endpoint, RequiresJSONMapper {
      */
     <T> T getJSON(Class<T> desiredType) throws JsonMappingException,
             JsonParseException, IOException, HTTPException;
+
+    /**
+     *
+     * @param <D> The type to which the "data" field is to be marshalled
+     * @param <M> The type to which the "meta" field is to be marshalled
+     */
+    class DataResponse<D, M> {
+        @Getter
+        @Setter
+        private D data;
+
+        @Getter
+        @Setter
+        private M meta;
+    }
+
+    /**
+     *
+     * @param <E> The type to which elements in the "errors" field are to be marshalled
+     * @param <M> The type to which the "meta" field is to be marshalled
+     */
+    class ErrorResponse<E, M> {
+        @Getter
+        @Setter
+        private List<E> errors;
+
+        @Getter
+        @Setter
+        private M meta;
+    }
 }

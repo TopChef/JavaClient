@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -265,7 +264,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
     public static final class JobDetails<P, R> {
         @Getter
         @Setter
-        private Date date_submitted;
+        private String date_submitted;
 
         @Getter
         @Setter
