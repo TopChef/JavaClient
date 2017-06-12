@@ -37,8 +37,8 @@ public final class GetStatus extends AbstractJobEndpointTestCase {
 
         Job job = new JobEndpoint(mocks.getClient(), jobId);
         assertEquals(
-                response.getData().getParameters(),
-                job.getParameters()
+                response.getData().getStatus(),
+                job.getStatus().toString()
         );
 
         context.assertIsSatisfied();

@@ -36,8 +36,8 @@ public interface Service extends ImmutableJSONEndpoint {
     /**
      *
      * @return A list of jobs that have been registered with this service
-     * @throws IOException If the server cannot be contacted
      * @throws HTTPException If the server does something weird
+     * @throws IOException If the server cannot be contacted
      */
     List<Job> getJobs() throws HTTPException, IOException;
 
