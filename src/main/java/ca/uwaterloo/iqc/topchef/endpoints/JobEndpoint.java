@@ -227,6 +227,12 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         return connection;
     }
 
+    /**
+     *
+     * @param status The status for which a string is to be retrieved
+     * @return The string matching this job execution status
+     * @throws IOException If a match for this {@link ca.uwaterloo.iqc.topchef.endpoints.Job.Status} is not defined
+     */
     @NotNull
     private static String getStringForStatus(Status status) throws IOException {
         switch (status) {
@@ -241,6 +247,14 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         }
     }
 
+    /**
+     *
+     * @param rawResponse The original response that is to be cast
+     * @param <P> The type to which the job parameters are to be cast
+     * @param <R> The type to which the job result is to be cast
+     * @return The response, cast to the appropriate type
+     * @throws IOException If the casting cannot be done
+     */
     @Contract(pure = true)
     @SuppressWarnings("unchecked")
     private <P, R> ResponseToJobDetailsGetRequest<P, R> dangerouslyCastParametersToType(
@@ -254,12 +268,23 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         }
     }
 
+    /**
+     * The JSON template for a response to the jobs endpoint of this service
+     * @param <P> The type of the job parameter schema
+     * @param <R> The type of the job result schema
+     */
     public static class ResponseToJobDetailsGetRequest<P, R> {
         @Getter
         @Setter
         private JobDetails<P, R> data;
     }
 
+    /**
+     * The JSON template for what should be contained in the ``data`` keyword inside the returned
+     * JSON. This template describes the data returned by the service
+     * @param <P> The type for the job parameter schema
+     * @param <R> The type for the job result schema
+     */
     @EqualsAndHashCode
     public static final class JobDetails<P, R> {
         @Getter
@@ -283,5 +308,8 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         private R result;
     }
 
+    /**
+     * A response with the parameter and result schema type set to {@link Object}
+     */
     private static class GenericResponse extends ResponseToJobDetailsGetRequest<Object, Object>{}
 }

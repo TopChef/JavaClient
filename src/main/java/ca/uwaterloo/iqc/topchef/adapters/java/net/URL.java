@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
- * Describes a contract for a Java URL
+ * Describes a contract for a Java URL, and provides a means to build relative URLs out of a base URL.
  */
 public interface URL extends Comparable<URL> {
     /**

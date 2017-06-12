@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * Describes a job
+ * Describes a job. A job represents a unit of work that a client can execute. A
+ * job is uniquely-identified by its UUID. Each job has a set of parameters, and a set of results.
+ * The job parameters must match the job registration schema. The results must match the job result schema
  */
 public interface Job extends Endpoint {
 
