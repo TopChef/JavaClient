@@ -1,5 +1,6 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.abstract_immutable_json_endpoint;
 
+import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.AbstractEndpointsTestCase;
@@ -10,6 +11,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Base class for unit tests of {@link AbstractImmutableJSONEndpoint}
@@ -62,6 +64,22 @@ public abstract class AbstractImmutableJSONEndpointTestCase extends AbstractEndp
             JSON json = new JSON();
             json.setData(stringGenerator.generate(rng, status));
             return json;
+        }
+    }
+
+    protected static final class ObjectMapperGenerator extends Generator<ObjectMapper> {
+
+        public ObjectMapperGenerator(){
+            super(ObjectMapper.class);
+        }
+
+        /**
+         * A generator for JSON object mappers
+         */
+        @Contract("_, _ -> !null")
+        @Override
+        public ObjectMapper generate(SourceOfRandomness rng, GenerationStatus status){
+            return new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper.ObjectMapper();
         }
     }
 }

@@ -1,7 +1,6 @@
 package ca.uwaterloo.iqc.topchef.endpoints;
 
 import ca.uwaterloo.iqc.topchef.Client;
-import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
@@ -29,9 +28,6 @@ import java.util.UUID;
  */
 public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Service {
     private static final Logger log = LoggerFactory.getLogger(ServiceEndpoint.class);
-
-    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
-            .wrapper.ObjectMapper();
 
     /**
      * The UUID of this service, used to uniquely refer to this service
@@ -99,7 +95,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         connection.connect();
         assertGoodResponseCode(connection);
         return readResponseFromJobsEndpoint(
-                mapper.readValue(connection.getInputStream(), JobsEndpointResponse.class),
+                this.getMapper().readValue(connection.getInputStream(), JobsEndpointResponse.class),
                 client
         );
     }
@@ -123,7 +119,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
 
     @NotNull
     private Optional<Job> getNextJobFromResponse(InputStream serverResponse) throws IOException {
-        JobsEndpointResponse response = mapper.readValue(serverResponse, JobsEndpointResponse.class);
+        JobsEndpointResponse response = this.getMapper().readValue(serverResponse, JobsEndpointResponse.class);
         JobsEndpointData firstJobFromResponse;
 
         try {

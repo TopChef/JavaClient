@@ -1,5 +1,6 @@
 package ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints;
 
+import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.RequiresJSONMapper;
 import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -9,7 +10,7 @@ import java.io.IOException;
 /**
  * Describes an endpoint capable of getting JSON via an HTTP GET request
  */
-public interface ImmutableJSONEndpoint extends Endpoint {
+public interface ImmutableJSONEndpoint extends Endpoint, RequiresJSONMapper {
 
     /**
      *
