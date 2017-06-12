@@ -1,8 +1,6 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.job_endpoint;
 
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPRequestMethod;
-import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
 import com.pholser.junit.quickcheck.From;

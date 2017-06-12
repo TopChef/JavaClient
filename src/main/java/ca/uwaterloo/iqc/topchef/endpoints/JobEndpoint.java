@@ -195,11 +195,11 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
     private static Status getStatusForString(String status) throws IOException {
         String comparison = status.toUpperCase();
 
-        if (comparison.equals("REGISTERED")){
+        if ("REGISTERED".equals(comparison)){
             return Status.REGISTERED;
-        } else if (comparison.equals("COMPLETED")) {
+        } else if ("COMPLETED".equals(comparison)) {
             return Status.COMPLETED;
-        } else if (comparison.equals("WORKING")) {
+        } else if ("WORKING".equals(comparison)) {
             return Status.WORKING;
         } else {
             throw new IOException(String.format("Cannot resolve status %s", comparison));
