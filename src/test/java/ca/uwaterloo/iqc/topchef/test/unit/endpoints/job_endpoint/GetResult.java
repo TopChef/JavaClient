@@ -3,7 +3,6 @@ package ca.uwaterloo.iqc.topchef.test.unit.endpoints.job_endpoint;
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
-import ca.uwaterloo.iqc.topchef.test.unit.AbstractUnitTestCase;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
