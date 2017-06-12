@@ -288,4 +288,16 @@ public abstract class AbstractUnitTestCase extends AbstractTestCase {
      * UUID generator
      */
     public static final class UUIDGenerator extends RFC4122.Version4 {}
+
+    public static final class ObjectGenerator extends Generator<Object> {
+        public ObjectGenerator(){
+            super(Object.class);
+        }
+
+        @Contract(value = "_, _ -> !null", pure = true)
+        @Override
+        public Object generate(SourceOfRandomness rng, GenerationStatus status){
+            return new Object();
+        }
+    }
 }

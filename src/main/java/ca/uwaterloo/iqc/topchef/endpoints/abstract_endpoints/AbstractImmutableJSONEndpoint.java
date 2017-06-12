@@ -7,6 +7,8 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.exceptions.*;
 import lombok.Cleanup;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,9 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
     /**
      * A mapper that can be used to read and marshall JSON
      */
-    private static final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
+    @Getter
+    @Setter
+    private ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core
             .wrapper.ObjectMapper();
 
     /**

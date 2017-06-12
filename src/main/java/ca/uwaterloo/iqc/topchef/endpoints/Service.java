@@ -28,9 +28,17 @@ public interface Service extends ImmutableJSONEndpoint {
 
     /**
      * Let the server know that this service is still alive
+     * @throws IOException If the server cannot be contacted
+     * @throws HTTPException If the server does something weird
      */
     void checkIn() throws HTTPException, IOException;
 
+    /**
+     *
+     * @return A list of jobs that have been registered with this service
+     * @throws IOException If the server cannot be contacted
+     * @throws HTTPException If the server does something weird
+     */
     List<Job> getJobs() throws HTTPException, IOException;
 
     /**
