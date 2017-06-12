@@ -52,8 +52,23 @@ public interface Job extends Endpoint {
      */
     void setStatus(Status status) throws HTTPException, IOException;
 
+    /**
+     *
+     * @param <T> The type to which the result is to be marshalled
+     * @return The job results
+     * @throws HTTPException If the server does something weird
+     * @throws IOException If the server cannot be contacted, or there is a problem marshalling JSON
+     */
     <T> T getResult() throws HTTPException, IOException;
 
+    /**
+     *
+     * @param result The job result
+     * @param <T> The type for marshalling the job result
+     * @throws HTTPException If the server returns an unexpected response code. This includes the server returning a
+     * bad request error if the result doesn't match the result schema
+     * @throws IOException If the server cannot be contacted, or if there is a problem marshalling JSON.
+     */
     <T> void setResult(T result) throws HTTPException, IOException;
 
     /**

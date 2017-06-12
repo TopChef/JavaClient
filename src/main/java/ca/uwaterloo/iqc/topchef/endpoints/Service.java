@@ -57,7 +57,19 @@ public interface Service extends ImmutableJSONEndpoint {
      */
     Optional<Job> getNextJob() throws HTTPException, IOException;
 
+    /**
+     *
+     * @return {@link Boolean#TRUE} if the service has timed out. Otherwise, it returns {@link Boolean#FALSE}
+     * @throws HTTPException If the server returns an unexpected HTTP response
+     * @throws IOException If the server cannot be contacted
+     */
     Boolean hasTimedOut() throws HTTPException, IOException;
 
+    /**
+     *
+     * @param other The instance against which this service is to be compared for equality
+     * @param <T> The type against which this is to be compared
+     * @return {@link Boolean#TRUE} if the services are equal, and {@link Boolean#FALSE} if not
+     */
     <T extends Service> Boolean equals(T other);
 }

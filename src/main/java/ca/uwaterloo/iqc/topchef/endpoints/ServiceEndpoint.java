@@ -66,6 +66,12 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         this(client, UUID.fromString(id));
     }
 
+    /**
+     *
+     * @return The name of the service
+     * @throws HTTPException If the server returns an unexpected response code
+     * @throws IOException If there is a client-side error
+     */
     @Override
     public String getName() throws HTTPException, IOException {
         return getServiceData().getName();
@@ -94,6 +100,12 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         assertGoodResponseCode(connection);
     }
 
+    /**
+     *
+     * @return The list of jobs that have been registered with this service
+     * @throws HTTPException If the server returns an unexpected response
+     * @throws IOException If there is an error on the client side
+     */
     @Override
     public List<Job> getJobs() throws HTTPException, IOException {
         @Cleanup URLConnection connection = getConnectionForGettingJobs(this.client, this.serviceID);
@@ -105,6 +117,12 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         );
     }
 
+    /**
+     *
+     * @return The next job, if it exists
+     * @throws HTTPException If the server returns an unexpected response
+     * @throws IOException If there is an error on the client side
+     */
     @Override
     public Optional<Job> getNextJob() throws HTTPException, IOException {
         Optional<Job> nextJob;
@@ -122,16 +140,34 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return nextJob;
     }
 
+    /**
+     *
+     * @return {@link Boolean#TRUE} if the service has timed out, otherwise {@link Boolean#FALSE}
+     * @throws HTTPException If the server returns an unexpected response
+     * @throws IOException If there is an error on the client side
+     */
     @Override
     public Boolean hasTimedOut() throws HTTPException, IOException {
         return getServiceData().getHas_timed_out();
     }
 
+    /**
+     *
+     * @param other The instance against which this service is to be compared for equality
+     * @param <T> The type of the other thing against which this service is being compared
+     * @return whether the UUID of this service and the other service are equal
+     */
     @Override
     public <T extends Service> Boolean equals(T other){
         return this.getServiceID().equals(other.getServiceID());
     }
 
+    /**
+     *
+     * @param serverResponse The server response to parse
+     * @return The next job retrieved from that server
+     * @throws IOException If the response cannot be parsed
+     */
     @NotNull
     private Optional<Job> getNextJobFromResponse(InputStream serverResponse) throws IOException {
         JobsEndpointResponse response = this.getMapper().readValue(serverResponse, JobsEndpointResponse.class);
@@ -174,16 +210,36 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return connection;
     }
 
+    /**
+     *
+     * @param client The client for which the connection is to be retrieved
+     * @param serviceID The ID of this service
+     * @return A connection to the endpoint for getting jobs for a particular service.
+     * @throws IOException If the endpoint cannot be resolved
+     */
     private static URLConnection getConnectionForGettingJobs(Client client, UUID serviceID) throws IOException {
         URL jobsURL = client.getURLResolver().getJobsEndpointForService(serviceID);
         return openURLConnectionForJSONGet(jobsURL);
     }
 
+    /**
+     *
+     * @param client The client for which the connection is to be retrieved
+     * @param serviceID The ID of this service
+     * @return A connection to the endpoint for getting the next job in the queue for the service
+     * @throws IOException If the endpoint cannot be resolved
+     */
     private static URLConnection getConnectionForGettingNextJob(Client client, UUID serviceID) throws IOException {
         URL queueURL = client.getURLResolver().getQueueEndpointForService(serviceID);
         return openURLConnectionForJSONGet(queueURL);
     }
 
+    /**
+     *
+     * @param url The URL for which the connection is to be opened
+     * @return The open connection
+     * @throws IOException If the connection cannot be opened
+     */
     private static URLConnection openURLConnectionForJSONGet(URL url) throws IOException {
         URLConnection connection = openURLConnection(url);
 
@@ -193,6 +249,12 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return connection;
     }
 
+    /**
+     *
+     * @param url The URL for which the connection is to be opened
+     * @return The open connection
+     * @throws IOException If the connection cannot be opened
+     */
     private static URLConnection openURLConnection(URL url) throws IOException {
         try {
             return url.openConnection();
@@ -201,6 +263,12 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         }
     }
 
+    /**
+     *
+     * @param response The response from the server
+     * @param client The client to use in constructing the Job endpoints for the list
+     * @return The list of jobs, built from parsing the response given into this function
+     */
     private static List<Job> readResponseFromJobsEndpoint(JobsEndpointResponse response, Client client){
         List<Job> jobList = new LinkedList<Job>();
         List<JobsEndpointData> jobsEndpointData = response.getData();
@@ -212,6 +280,9 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         return jobList;
     }
 
+    /**
+     * The response from the services endpoint
+     */
     public static class ServicesResponse extends ImmutableJSONEndpoint.DataResponse<ServiceData, Object>{}
 
     /**
@@ -247,16 +318,16 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         private String url;
     }
 
-    public static class JobsEndpointResponse {
-        @Getter
-        @Setter
-        private Object meta;
+    /**
+     * The raw response from the jobs endpoint
+     */
+    public static class JobsEndpointResponse extends ImmutableJSONEndpoint.DataResponse<
+            List<JobsEndpointData>,Object>{}
 
-        @Getter
-        @Setter
-        private List<JobsEndpointData> data;
-    }
-
+    /**
+     * The template for the data contained in the ``data`` keyword of the response from the ``/jobs`` endpoint of
+     * this service
+     */
     public static class JobsEndpointData {
         @Getter
         @Setter
