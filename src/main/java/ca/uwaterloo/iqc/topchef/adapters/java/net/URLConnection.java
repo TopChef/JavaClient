@@ -43,6 +43,12 @@ public interface URLConnection extends Closeable {
      */
     Optional<String> getRequestProperty(String key);
 
+    /**
+     * Set a request header to a particular value.
+     *
+     * @param key The key of the header
+     * @param value The value to which that key is to be set
+     */
     void setRequestProperty(@NotNull String key, String value);
 
     /**
