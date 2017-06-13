@@ -6,9 +6,6 @@ import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import org.jmock.Mockery;
 import org.junit.runner.RunWith;
 
@@ -18,10 +15,10 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setResult(Object)}
+ * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setResult(String)}
  */
 @RunWith(JUnitQuickcheck.class)
-public final class SetResult extends AbstractJobEndpointTestCase {
+public final class SetResultString extends AbstractJobEndpointTestCase {
     private final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper
             .ObjectMapper();
 
@@ -40,35 +37,19 @@ public final class SetResult extends AbstractJobEndpointTestCase {
         context.checking(new ExpectationsForSetParameters(mocks, jobId));
 
         Job endpoint = new JobEndpoint(mocks.getClient(), jobId);
-        Result result = new Result();
-        result.setValue(results);
+        endpoint.setResult(mapper.writeValueAsString(results));
 
-        endpoint.setResult(result);
+        response.getData().setResult(results);
 
-        response.getData().setResult(result);
-
-        ResponseWithResult resultFromEndpoint = mapper.readValue(mocks.getOutputStream().toString(), ResponseWithResult
-                .class);
-
-        assertEquals(resultFromEndpoint.getResult(), result);
-
-        context.assertIsSatisfied();
+        assertEquals(
+                response.getData(),
+                mapper.readValue(mocks.getOutputStream().toString(), response.getData().getClass())
+        );
     }
 
     private static final class ExpectationsForSetParameters extends ExpectationsForTestWithPut {
         public ExpectationsForSetParameters(MockPackage mocks, UUID jobId) throws Exception {
             super(mocks, jobId);
         }
-    }
-
-    @EqualsAndHashCode
-    private static final class Result {
-        @Getter
-        @Setter
-        private String value;
-    }
-
-    private static final class ResponseWithResult extends JobEndpoint.JobDetails<Object, Result>{
-        // Extend the response with the appropriate result type in order to bypass type erasure
     }
 }

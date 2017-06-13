@@ -55,6 +55,16 @@ public interface Job extends Endpoint {
     <T> void setResult(T result) throws HTTPException, IOException;
 
     /**
+     * If the incoming result is a string, parse that string as JSON before
+     * setting the job result.
+     *
+     * @param result The job result
+     * @throws HTTPException If the server does something weird
+     * @throws IOException If the server cannot be contacted
+     */
+    void setResult(String result) throws HTTPException, IOException;
+
+    /**
      * The execution status of a particular job
      */
     enum Status {
