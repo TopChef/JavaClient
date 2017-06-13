@@ -42,7 +42,7 @@ public interface Job extends Endpoint {
      * @throws HTTPException If the server does something weird
      * @throws IOException If the server cannot be contacted
      */
-    Status getStatus() throws HTTPException, IOException;
+    JobStatus getStatus() throws HTTPException, IOException;
 
     /**
      *
@@ -50,7 +50,7 @@ public interface Job extends Endpoint {
      * @throws HTTPException If the server does something weird
      * @throws IOException If the server cannot be contacted
      */
-    void setStatus(Status status) throws HTTPException, IOException;
+    void setStatus(JobStatus status) throws HTTPException, IOException;
 
     /**
      *
@@ -80,13 +80,4 @@ public interface Job extends Endpoint {
      * @throws IOException If the server cannot be contacted
      */
     void setResult(String result) throws HTTPException, IOException;
-
-    /**
-     * The execution status of a particular job
-     */
-    enum Status {
-        REGISTERED,
-        WORKING,
-        COMPLETED
-    }
 }

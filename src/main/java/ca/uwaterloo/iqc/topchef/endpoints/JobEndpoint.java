@@ -118,7 +118,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      * @throws HTTPException If the server does not return the correct response codes
      */
     @Override
-    public Status getStatus() throws IOException, HTTPException {
+    public JobStatus getStatus() throws IOException, HTTPException {
         ResponseToJobDetailsGetRequest<Object, Object> response = getJSON(GenericResponse.class);
         String status = response.getData().getStatus();
         return getStatusForString(status);
@@ -131,7 +131,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      * @throws HTTPException If the server does not return the expected response
      */
     @Override
-    public void setStatus(Status status) throws IOException, HTTPException {
+    public void setStatus(JobStatus status) throws IOException, HTTPException {
         String newStatus = getStringForStatus(status);
         JobDetails<Object, Object> jobData = getJSON(GenericResponse.class).getData();
         jobData.setStatus(newStatus);
@@ -207,15 +207,15 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      */
     @NotNull
     @Contract(pure = true)
-    private static Status getStatusForString(String status) throws IOException {
+    private static JobStatus getStatusForString(String status) throws IOException {
         String comparison = status.toUpperCase();
 
         if ("REGISTERED".equals(comparison)){
-            return Status.REGISTERED;
+            return JobStatus.REGISTERED;
         } else if ("COMPLETED".equals(comparison)) {
-            return Status.COMPLETED;
+            return JobStatus.COMPLETED;
         } else if ("WORKING".equals(comparison)) {
-            return Status.WORKING;
+            return JobStatus.WORKING;
         } else {
             throw new IOException(String.format("Cannot resolve status %s", comparison));
         }
@@ -246,10 +246,10 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      *
      * @param status The status for which a string is to be retrieved
      * @return The string matching this job execution status
-     * @throws IOException If a match for this {@link ca.uwaterloo.iqc.topchef.endpoints.Job.Status} is not defined
+     * @throws IOException If a match for this {@link JobStatus} is not defined
      */
     @NotNull
-    private static String getStringForStatus(Status status) throws IOException {
+    private static String getStringForStatus(JobStatus status) throws IOException {
         switch (status) {
             case COMPLETED:
                 return "COMPLETED";

@@ -2,6 +2,7 @@ package ca.uwaterloo.iqc.topchef.test.integration.endpoints.job_endpoint;
 
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.JobStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,10 +10,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains integration tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setStatus(Job.Status)}
+ * Contains integration tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setStatus(JobStatus)}
  */
 public final class SetStatus extends AbstractJobEndpointTestCase {
-    private Job.Status status;
+    private JobStatus status;
 
     @Before
     public void getStatus() throws Exception {
@@ -23,9 +24,9 @@ public final class SetStatus extends AbstractJobEndpointTestCase {
     @Test
     public void setStatus() throws Exception {
         Job job = new JobEndpoint(client, jobID);
-        job.setStatus(Job.Status.WORKING);
+        job.setStatus(JobStatus.WORKING);
 
-        assertEquals(Job.Status.WORKING, job.getStatus());
+        assertEquals(JobStatus.WORKING, job.getStatus());
     }
 
     @After
