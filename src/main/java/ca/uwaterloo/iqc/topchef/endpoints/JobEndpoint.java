@@ -170,6 +170,21 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
     }
 
     /**
+     * If the result to set is a string, parse the string as JSON
+     * @param result The result to set.
+     * @throws IOException If the server cannot be contacted or if there is an error processing JSON on the client side
+     * @throws HTTPException If the server does not return the expected response
+     */
+    @Override
+    public void setResult(String result) throws IOException, HTTPException {
+        ResponseToJobDetailsGetRequest<Object, Object> response = dangerouslyCastParametersToType(
+                getJSON(ResponseToJobDetailsGetRequest.class)
+        );
+        response.getData().setResult(getMapper().readValue(result));
+        putJobData(response.getData());
+    }
+
+    /**
      *
      * @param data The new job details that will be sent to the server
      * @param <P> The type that the job parameters have
@@ -261,7 +276,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
     }
 
     @EqualsAndHashCode
-    public static final class JobDetails<P, R> {
+    public static class JobDetails<P, R> {
         @Getter
         @Setter
         private String date_submitted;
