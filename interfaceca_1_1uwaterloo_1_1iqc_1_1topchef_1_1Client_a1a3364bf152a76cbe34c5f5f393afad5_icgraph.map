@@ -1,0 +1,8 @@
+<map id="ca.uwaterloo.iqc.topchef.Client.getURLResolver" name="ca.uwaterloo.iqc.topchef.Client.getURLResolver">
+<area shape="rect" id="node2" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1unit_1_1topchef__client_1_1GetURLResolver.html#aabdd484961a341b72f164b55373e0959" title="ca.uwaterloo.iqc.topchef.test.unit.topchef\l_client.GetURLResolver.getURLResolver" alt="" coords="237,5,502,47"/>
+<area shape="rect" id="node3" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JobEndpoint.html#adf4f042aee2a00f52e922bb6f3bd51a0" title="ca.uwaterloo.iqc.topchef.endpoints.\lJobEndpoint.JobEndpoint" alt="" coords="255,71,483,112"/>
+<area shape="rect" id="node4" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JSONSchemaValidator.html#a16eea70a687e58dad08334e551b5cbb2" title="ca.uwaterloo.iqc.topchef.endpoints.\lJSONSchemaValidator.JSONSchemaValidator" alt="" coords="221,136,517,177"/>
+<area shape="rect" id="node5" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1ServiceEndpoint.html#aa342bbfd19eee55e232905e2de4f10c5" title="ca.uwaterloo.iqc.topchef.endpoints.\lServiceEndpoint.ServiceEndpoint" alt="" coords="255,201,483,243"/>
+<area shape="rect" id="node6" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1ServiceEndpoint.html#a8011e96623f7e58e42707515734d8040" title="ca.uwaterloo.iqc.topchef.endpoints.\lServiceEndpoint.hasTimedOut" alt="" coords="255,267,483,308"/>
+<area shape="rect" id="node7" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1ServicesEndpoint.html#a58577b6ee3a56d65151e4567c8bdff6d" title="ca.uwaterloo.iqc.topchef.endpoints.\lServicesEndpoint.ServicesEndpoint" alt="" coords="254,332,485,373"/>
+</map>

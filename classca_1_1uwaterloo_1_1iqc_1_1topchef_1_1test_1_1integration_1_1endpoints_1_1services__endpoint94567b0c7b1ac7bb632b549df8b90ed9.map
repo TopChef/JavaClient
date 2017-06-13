@@ -1,0 +1,7 @@
+<map id="ca.uwaterloo.iqc.topchef.test.integration.endpoints.services_endpoint.AbstractServicesEndpointTestCase" name="ca.uwaterloo.iqc.topchef.test.integration.endpoints.services_endpoint.AbstractServicesEndpointTestCase">
+<area shape="rect" id="node5" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1integration_1_1endpoints_1_1service__endpoint_1_1CheckIn.html" title="ca.uwaterloo.iqc.topchef.test.integration.endpoints.service\l_endpoint.CheckIn" alt="" coords="1339,5,1699,47"/>
+<area shape="rect" id="node6" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1integration_1_1endpoints_1_1services__endpoint_1_1GetDataFromServer.html" title="ca.uwaterloo.iqc.topchef.test.integration.endpoints.services\l_endpoint.GetDataFromServer" alt="" coords="1336,71,1703,112"/>
+<area shape="rect" id="node2" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1integration_1_1endpoints_1_1AbstractEndpointsTestCase.html" title="ca.uwaterloo.iqc.topchef.test.integration.endpoints.\lAbstractEndpointsTestCase" alt="" coords="555,39,873,80"/>
+<area shape="rect" id="node3" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1integration_1_1AbstractIntegrationTestCase.html" title="ca.uwaterloo.iqc.topchef.test.integration.\lAbstractIntegrationTestCase" alt="" coords="248,39,507,80"/>
+<area shape="rect" id="node4" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1AbstractTestCase.html" title="ca.uwaterloo.iqc.topchef.test.\lAbstractTestCase" alt="" coords="5,39,200,80"/>
+</map>

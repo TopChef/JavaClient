@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['testgoodstatuscode',['testGoodStatusCode',['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1test_1_1integration_1_1adapters_1_1java_1_1net_1_1wrap5e25c26cbc94a5394b324a67831356ea.html#acbce23188612565048ef42a037d777c8',1,'ca::uwaterloo::iqc::topchef::test::integration::adapters::java::net::wrapper::url_connection::GetResponseCode']]],
+  ['topchefclient',['TopChefClient',['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1TopChefClient.html#a624c50b459e65b35e33240cf188ae20b',1,'ca.uwaterloo.iqc.topchef.TopChefClient.TopChefClient(URL url)'],['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1TopChefClient.html#a6c382ab7d7ac7ffced4c8f0d25ed1c8e',1,'ca.uwaterloo.iqc.topchef.TopChefClient.TopChefClient(java.net.URL url)'],['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1TopChefClient.html#a93833aec917ded30cf5ebd83a3b447d8',1,'ca.uwaterloo.iqc.topchef.TopChefClient.TopChefClient(String url)']]],
+  ['tostring',['toString',['../interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URL.html#ad5c89cadc626ece1bf1ec544c184cd6a',1,'ca.uwaterloo.iqc.topchef.adapters.java.net.URL.toString()'],['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1wrapper_1_1URL.html#a822c42bf985bb4cc3f52df5c5cb9282a',1,'ca.uwaterloo.iqc.topchef.adapters.java.net.wrapper.URL.toString()']]]
+];

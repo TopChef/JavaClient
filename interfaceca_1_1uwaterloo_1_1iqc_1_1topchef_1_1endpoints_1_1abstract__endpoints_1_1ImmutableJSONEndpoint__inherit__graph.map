@@ -1,0 +1,12 @@
+<map id="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.ImmutableJSONEndpoint" name="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.ImmutableJSONEndpoint">
+<area shape="rect" id="node4" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1AbstractImmutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.AbstractImmutableJSONEndpoint" alt="" coords="763,143,1049,184"/>
+<area shape="rect" id="node11" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1MutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.MutableJSONEndpoint" alt="" coords="769,73,1043,115"/>
+<area shape="rect" id="node12" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1Service.html" title="ca.uwaterloo.iqc.topchef.endpoints.\lService" alt="" coords="1199,217,1427,259"/>
+<area shape="rect" id="node2" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1Endpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.Endpoint" alt="" coords="61,109,336,151"/>
+<area shape="rect" id="node3" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1com_1_1fasterxml_1_1jackson_1_1core_1_1RequiresJSONMapper.html" title="ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.\lRequiresJSONMapper" alt="" coords="5,175,392,216"/>
+<area shape="rect" id="node5" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1AbstractMutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.AbstractMutableJSONEndpoint" alt="" coords="1176,71,1451,112"/>
+<area shape="rect" id="node6" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JobEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.\lJobEndpoint" alt="" coords="1577,5,1805,47"/>
+<area shape="rect" id="node7" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JSONSchemaValidator.html" title="ca.uwaterloo.iqc.topchef.endpoints.\lJSONSchemaValidator" alt="" coords="1577,71,1805,112"/>
+<area shape="rect" id="node8" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1ServiceEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.\lServiceEndpoint" alt="" coords="1577,209,1805,251"/>
+<area shape="rect" id="node9" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1ServicesEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.\lServicesEndpoint" alt="" coords="1577,136,1805,177"/>
+</map>

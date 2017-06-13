@@ -1,0 +1,6 @@
+<map id="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint.assertGoodResponseCode" name="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint.assertGoodResponseCode">
+<area shape="rect" id="node2" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URL.html#aebdfa5f5e9aca742398ae89b6763aa58" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURL.openConnection" alt="" coords="380,5,652,47"/>
+<area shape="rect" id="node3" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URLConnection.html#acd29648a3bd95be8079082ace5bd0ca6" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURLConnection.setDoOutput" alt="" coords="380,71,652,112"/>
+<area shape="rect" id="node4" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URLConnection.html#a2cb6ebfb62768e4d534616434de69807" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURLConnection.setRequestProperty" alt="" coords="380,136,652,177"/>
+<area shape="rect" id="node5" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URLConnection.html#a2a9b8f4482a38fc5e8f510285880dd01" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURLConnection.setRequestMethod" alt="" coords="380,201,652,243"/>
+</map>

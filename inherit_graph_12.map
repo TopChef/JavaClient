@@ -1,0 +1,12 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1AdapterException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lAdapterException" alt="" coords="133,71,368,112"/>
+<area shape="rect" id="node4" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1HTTPException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lHTTPException" alt="" coords="133,201,368,243"/>
+<area shape="rect" id="node3" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1HTTPConnectionCastException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lHTTPConnectionCastException" alt="" coords="419,5,653,47"/>
+<area shape="rect" id="node5" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1InternalServerErrorException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lInternalServerErrorException" alt="" coords="419,71,653,112"/>
+<area shape="rect" id="node6" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1MethodNotAllowedException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lMethodNotAllowedException" alt="" coords="419,136,653,177"/>
+<area shape="rect" id="node7" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1NoContentException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lNoContentException" alt="" coords="419,201,653,243"/>
+<area shape="rect" id="node8" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1ResourceNotFoundException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lResourceNotFoundException" alt="" coords="419,267,653,308"/>
+<area shape="rect" id="node10" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1SchemaMismatchException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lSchemaMismatchException" alt="" coords="419,332,653,373"/>
+<area shape="rect" id="node11" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1UnexpectedResponseCodeException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lUnexpectedResponseCodeException" alt="" coords="416,397,656,439"/>
+<area shape="rect" id="node9" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1exceptions_1_1ServiceNotFoundException.html" title="ca.uwaterloo.iqc.topchef.exceptions.\lServiceNotFoundException" alt="" coords="704,267,939,308"/>
+</map>

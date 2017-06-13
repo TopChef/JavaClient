@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['validate',['validate',['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JSONSchemaValidator.html#a6c7d314eb40ccfc89f71348793d0d33a',1,'ca.uwaterloo.iqc.topchef.endpoints.JSONSchemaValidator.validate(Object instance, Object schema)'],['../classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1JSONSchemaValidator.html#a2265ce856d2f30fb6c33e2f2894c26c4',1,'ca.uwaterloo.iqc.topchef.endpoints.JSONSchemaValidator.validate(String instance, String schema)'],['../interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1Validator.html#a27ee705f2f8ace9c1b30f6895858ca2b',1,'ca.uwaterloo.iqc.topchef.endpoints.Validator.validate(Object object, Object schema)'],['../interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1Validator.html#a7557b98ad4f75e82c7949599c65b7ec7',1,'ca.uwaterloo.iqc.topchef.endpoints.Validator.validate(String object, String schema)']]]
+];

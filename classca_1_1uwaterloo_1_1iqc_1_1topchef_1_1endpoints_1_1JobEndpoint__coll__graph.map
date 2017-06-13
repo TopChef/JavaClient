@@ -1,0 +1,10 @@
+<map id="ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint" name="ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint">
+<area shape="rect" id="node2" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1AbstractMutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.AbstractMutableJSONEndpoint" alt="" coords="1097,89,1372,130"/>
+<area shape="rect" id="node3" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1AbstractImmutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.AbstractImmutableJSONEndpoint" alt="" coords="763,39,1049,81"/>
+<area shape="rect" id="node4" href="$classca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1AbstractEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.AbstractEndpoint" alt="" coords="440,39,715,81"/>
+<area shape="rect" id="node5" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1Endpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.Endpoint" alt="" coords="61,39,336,81"/>
+<area shape="rect" id="node6" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1ImmutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.ImmutableJSONEndpoint" alt="" coords="440,105,715,146"/>
+<area shape="rect" id="node9" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1Job.html" title="ca.uwaterloo.iqc.topchef.endpoints.Job" alt="" coords="1110,5,1359,32"/>
+<area shape="rect" id="node8" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1endpoints_1_1abstract__endpoints_1_1MutableJSONEndpoint.html" title="ca.uwaterloo.iqc.topchef.endpoints.abstract\l_endpoints.MutableJSONEndpoint" alt="" coords="769,105,1043,146"/>
+<area shape="rect" id="node7" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1com_1_1fasterxml_1_1jackson_1_1core_1_1RequiresJSONMapper.html" title="ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.\lRequiresJSONMapper" alt="" coords="5,134,392,175"/>
+</map>

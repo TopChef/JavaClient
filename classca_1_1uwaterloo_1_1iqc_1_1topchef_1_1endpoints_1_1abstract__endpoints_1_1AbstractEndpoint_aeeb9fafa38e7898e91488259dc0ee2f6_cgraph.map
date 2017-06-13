@@ -1,0 +1,5 @@
+<map id="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint.isEndpointUp" name="ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractEndpoint.isEndpointUp">
+<area shape="rect" id="node2" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URL.html#aebdfa5f5e9aca742398ae89b6763aa58" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURL.openConnection" alt="" coords="328,5,600,47"/>
+<area shape="rect" id="node3" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URLConnection.html#a2a9b8f4482a38fc5e8f510285880dd01" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURLConnection.setRequestMethod" alt="" coords="328,71,600,112"/>
+<area shape="rect" id="node4" href="$interfaceca_1_1uwaterloo_1_1iqc_1_1topchef_1_1adapters_1_1java_1_1net_1_1URLConnection.html#aa43c09d4b9ad31fd0d3af5ec6fdf91ea" title="ca.uwaterloo.iqc.topchef.adapters.java.net.\lURLConnection.getResponseCode" alt="" coords="328,136,600,177"/>
+</map>
