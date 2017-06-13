@@ -3,6 +3,7 @@ package ca.uwaterloo.iqc.topchef.test.unit.endpoints.job_endpoint;
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.JobStatus;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
@@ -15,7 +16,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setStatus(Job.Status)}
+ * Contains unit tests for {@link ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint#setStatus(JobStatus)}
  */
 @RunWith(JUnitQuickcheck.class)
 public final class SetStatus extends AbstractJobEndpointTestCase {
@@ -26,7 +27,7 @@ public final class SetStatus extends AbstractJobEndpointTestCase {
     public void setStatus(
             @From(GenericResponseGenerator.class)JobEndpoint.ResponseToJobDetailsGetRequest<Object, Object> response,
             @From(UUIDGenerator.class) UUID jobId,
-            @From(JobStatusGenerator.class) Job.Status newStatus
+            @From(JobStatusGenerator.class) JobStatus newStatus
     ) throws Exception {
         Mockery context = new Mockery();
         MockPackage mocks = new MockPackage(context);

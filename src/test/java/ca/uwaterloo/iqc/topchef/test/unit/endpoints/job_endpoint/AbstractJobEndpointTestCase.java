@@ -7,6 +7,7 @@ import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URLConnection;
 import ca.uwaterloo.iqc.topchef.endpoints.Job;
 import ca.uwaterloo.iqc.topchef.endpoints.JobEndpoint;
+import ca.uwaterloo.iqc.topchef.endpoints.JobStatus;
 import ca.uwaterloo.iqc.topchef.test.unit.endpoints.AbstractEndpointsTestCase;
 import ca.uwaterloo.iqc.topchef.url_resolver.URLResolver;
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
@@ -62,14 +63,14 @@ public abstract class AbstractJobEndpointTestCase extends AbstractEndpointsTestC
         }
     }
 
-    protected static final class JobStatusGenerator extends Generator<Job.Status> {
+    protected static final class JobStatusGenerator extends Generator<JobStatus> {
         public JobStatusGenerator(){
-            super(Job.Status.class);
+            super(JobStatus.class);
         }
 
         @Override
-        public Job.Status generate(SourceOfRandomness rng, GenerationStatus status){
-            return Job.Status.values()[rng.nextInt(0, Job.Status.values().length - 1)];
+        public JobStatus generate(SourceOfRandomness rng, GenerationStatus status){
+            return JobStatus.values()[rng.nextInt(0, JobStatus.values().length - 1)];
         }
     }
 
@@ -79,7 +80,7 @@ public abstract class AbstractJobEndpointTestCase extends AbstractEndpointsTestC
 
         private static final Generator<Date> dateGenerator = new DateGenerator();
         private static final Generator<UUID> uuidGenerator = new UUIDGenerator();
-        private static final Generator<Job.Status> statusGenerator = new JobStatusGenerator();
+        private static final Generator<JobStatus> statusGenerator = new JobStatusGenerator();
 
         public JobDetailsGenerator(Generator<P> jobParametersGenerator, Generator<R> jobResultsGenerator){
             super(JobEndpoint.JobDetails.class);
