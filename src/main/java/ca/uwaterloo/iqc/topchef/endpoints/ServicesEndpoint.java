@@ -94,7 +94,8 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
         return constructedServiceList;
     }
 
-    public static class ServiceListResponse {
+    public static class ServiceListResponse extends
+            AbstractMutableJSONEndpoint.DataResponse<List<ServicesEndpoint.ServiceData>, Object, Object> {
         @Getter
         @Setter
         private List<ServicesEndpoint.ServiceData> data;
@@ -111,14 +112,10 @@ public class ServicesEndpoint extends AbstractMutableJSONEndpoint implements Ser
 
         @Getter
         @Setter
-        private Boolean has_timed_out;
+        private String description;
 
         @Getter
         @Setter
         private String name;
-
-        @Getter
-        @Setter
-        private String url;
     }
 }

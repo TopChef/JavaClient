@@ -37,7 +37,7 @@ public final class GetResult extends AbstractJobEndpointTestCase {
 
         Job job = new JobEndpoint(mocks.getClient(), jobId);
 
-        assertEquals(response.getData().getResult(), job.getResult());
+        assertEquals(response.getData().getResults(), job.getResult());
         context.assertIsSatisfied();
     }
 

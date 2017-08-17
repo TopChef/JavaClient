@@ -31,8 +31,6 @@ public abstract class AbstractServicesEndpointTestCase extends AbstractEndpoints
 
             service.setId(serviceIDGenerator.generate(rng, status));
             service.setName(nameGenerator.generate(rng, status));
-            service.setHas_timed_out(rng.nextBoolean());
-            service.setUrl(urlGenerator.generate(rng, status));
 
             return service;
         }

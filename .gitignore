@@ -30,6 +30,7 @@ gradle-app.setting
 
 # IntelliJ files
 .idea
+*.iml
 
 # Doxygen Build
 doc/build

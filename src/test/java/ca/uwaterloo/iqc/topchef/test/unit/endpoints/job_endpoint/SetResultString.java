@@ -39,7 +39,7 @@ public final class SetResultString extends AbstractJobEndpointTestCase {
         Job endpoint = new JobEndpoint(mocks.getClient(), jobId);
         endpoint.setResult(mapper.writeValueAsString(results));
 
-        response.getData().setResult(results);
+        response.getData().setResults(results);
 
         assertEquals(
                 response.getData(),
