@@ -108,7 +108,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         ResponseToJobDetailsGetRequest rawResponse = getJSON(ResponseToJobDetailsGetRequest.class);
         ResponseToJobDetailsGetRequest<T, Object> response = dangerouslyCastParametersToType(rawResponse);
         response.getData().setParameters(newParameters);
-        putJobData(response.getData());
+        patchJobData(response.getData());
     }
 
     /**
@@ -135,7 +135,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         String newStatus = getStringForStatus(status);
         JobDetails<Object, Object> jobData = getJSON(GenericResponse.class).getData();
         jobData.setStatus(newStatus);
-        putJobData(jobData);
+        patchJobData(jobData);
     }
 
     /**
@@ -150,7 +150,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         ResponseToJobDetailsGetRequest<Object, T> response = dangerouslyCastParametersToType(
                 getJSON(ResponseToJobDetailsGetRequest.class)
         );
-        return response.getData().getResult();
+        return response.getData().getResults();
     }
 
     /**
@@ -165,8 +165,8 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         ResponseToJobDetailsGetRequest<Object, T> response = dangerouslyCastParametersToType(
                 getJSON(ResponseToJobDetailsGetRequest.class)
         );
-        response.getData().setResult(result);
-        putJobData(response.getData());
+        response.getData().setResults(result);
+        patchJobData(response.getData());
     }
 
     /**
@@ -180,8 +180,8 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
         ResponseToJobDetailsGetRequest<Object, Object> response = dangerouslyCastParametersToType(
                 getJSON(ResponseToJobDetailsGetRequest.class)
         );
-        response.getData().setResult(getMapper().readValue(result));
-        putJobData(response.getData());
+        response.getData().setResults(getMapper().readValue(result));
+        patchJobData(response.getData());
     }
 
     /**
@@ -192,8 +192,8 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      * @throws IOException If the server cannot be contacted or if there is an error processing JSON on the client side
      * @throws HTTPException If the server does not return the expected response
      */
-    private <P, R> void putJobData(JobDetails<P, R> data) throws IOException, HTTPException {
-        @Cleanup URLConnection connection = getPutConnection(this.getURL());
+    private <P, R> void patchJobData(JobDetails<P, R> data) throws IOException, HTTPException {
+        @Cleanup URLConnection connection = getPatchConnection(this.getURL());
         connection.connect();
         this.getMapper().writeValue(connection.getOutputStream(), data);
         assertGoodResponseCode(connection);
@@ -224,18 +224,19 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
     /**
      *
      * @param url The URL for which the connection is to be made
-     * @return a connection for a PUT request to the API at the desired URL
+     * @return a connection for a PATCH request to the API at the desired URL
      * @throws IOException If the connection cannot be established
      */
-    private static URLConnection getPutConnection(URL url) throws IOException {
+    private static URLConnection getPatchConnection(URL url) throws IOException {
         URLConnection connection;
+
         try {
             connection = url.openConnection();
         } catch (HTTPConnectionCastException error){
             throw new IllegalStateException(error);
         }
 
-        connection.setRequestMethod(HTTPRequestMethod.PUT);
+        connection.setRequestMethod(HTTPRequestMethod.PATCH);
         connection.setDoOutput(Boolean.TRUE);
         connection.setRequestProperty("Content-Type", "application/json");
 
@@ -288,7 +289,8 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
      * @param <P> The type of the job parameter schema
      * @param <R> The type of the job result schema
      */
-    public static class ResponseToJobDetailsGetRequest<P, R> {
+    public static class ResponseToJobDetailsGetRequest<P, R> extends
+            AbstractMutableJSONEndpoint.DataResponse<JobDetails<P, R>, Object, Object> {
         @Getter
         @Setter
         private JobDetails<P, R> data;
@@ -320,7 +322,7 @@ public class JobEndpoint extends AbstractMutableJSONEndpoint implements Job, Req
 
         @Getter
         @Setter
-        private R result;
+        private R results;
     }
 
     /**

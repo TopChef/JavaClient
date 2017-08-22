@@ -191,7 +191,7 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
      * @throws IOException If I/O from this machine to the server does something weird
      */
     private ServiceData getServiceData() throws IOException, HTTPException {
-        DataResponse<ServiceData, Object> response = this.getJSON(ServicesResponse.class);
+        DataResponse<ServiceData, Object, Object> response = this.getJSON(ServicesResponse.class);
         return response.getData();
     }
 
@@ -283,12 +283,13 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
     /**
      * The response from the services endpoint
      */
-    public static class ServicesResponse extends ImmutableJSONEndpoint.DataResponse<ServiceData, Object>{}
+    public static class ServicesResponse extends ImmutableJSONEndpoint.DataResponse<ServiceData, Object, Object>{}
 
     /**
      * The template for the response JSON from a GET request to /services/(service_id)
+     * @param <J> The job detail type
      */
-    public static class ServiceData {
+    public static class ServiceData<J> {
         @Getter
         @Setter
         private String name;
@@ -315,20 +316,31 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
 
         @Getter
         @Setter
-        private String url;
+        private Boolean is_service_available;
+
+        @Getter
+        @Setter
+        private J jobs;
+
+        @Getter
+        @Setter
+        private Integer timeout;
     }
 
     /**
      * The raw response from the jobs endpoint
      */
     public static class JobsEndpointResponse extends ImmutableJSONEndpoint.DataResponse<
-            List<JobsEndpointData>,Object>{}
+            List<JobsEndpointData>,Object, Object>{}
 
     /**
      * The template for the data contained in the ``data`` keyword of the response from the ``/jobs`` endpoint of
      * this service
+     *
+     * @param <P> The type of parameters
+     * @param <R> The type of results
      */
-    public static class JobsEndpointData {
+    public static class JobsEndpointData<P, R> {
         @Getter
         @Setter
         private String date_submitted;
@@ -340,5 +352,13 @@ public class ServiceEndpoint extends AbstractMutableJSONEndpoint implements Serv
         @Getter
         @Setter
         private String status;
+
+        @Getter
+        @Setter
+        private P parameters;
+
+        @Getter
+        @Setter
+        private R results;
     }
 }

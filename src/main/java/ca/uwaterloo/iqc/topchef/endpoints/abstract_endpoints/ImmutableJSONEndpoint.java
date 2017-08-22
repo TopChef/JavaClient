@@ -38,8 +38,9 @@ public interface ImmutableJSONEndpoint extends Endpoint, RequiresJSONMapper {
      *
      * @param <D> The type to which the "data" field is to be marshalled
      * @param <M> The type to which the "meta" field is to be marshalled
+     * @param <L> The type of links
      */
-    class DataResponse<D, M> {
+    class DataResponse<D, M, L> {
         @Getter
         @Setter
         private D data;
@@ -47,14 +48,19 @@ public interface ImmutableJSONEndpoint extends Endpoint, RequiresJSONMapper {
         @Getter
         @Setter
         private M meta;
+
+        @Getter
+        @Setter
+        private L links;
     }
 
     /**
      *
      * @param <E> The type to which elements in the "errors" field are to be marshalled
      * @param <M> The type to which the "meta" field is to be marshalled
+     * @param <L> The links type
      */
-    class ErrorResponse<E, M> {
+    class ErrorResponse<E, M, L> {
         @Getter
         @Setter
         private List<E> errors;
@@ -62,5 +68,9 @@ public interface ImmutableJSONEndpoint extends Endpoint, RequiresJSONMapper {
         @Getter
         @Setter
         private M meta;
+
+        @Getter
+        @Setter
+        private L links;
     }
 }

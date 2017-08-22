@@ -92,7 +92,7 @@ public abstract class AbstractJobEndpointTestCase extends AbstractEndpointsTestC
         public JobEndpoint.JobDetails<P, R> generate(SourceOfRandomness rng, GenerationStatus status){
             JobEndpoint.JobDetails<P, R> details = new JobEndpoint.JobDetails<P, R>();
             details.setParameters(jobParametersGenerator.generate(rng, status));
-            details.setResult(jobResultsGenerator.generate(rng, status));
+            details.setResults(jobResultsGenerator.generate(rng, status));
             details.setDate_submitted(dateGenerator.generate(rng, status).toString());
             details.setId(uuidGenerator.generate(rng, status).toString());
             details.setStatus(statusGenerator.generate(rng, status).toString());

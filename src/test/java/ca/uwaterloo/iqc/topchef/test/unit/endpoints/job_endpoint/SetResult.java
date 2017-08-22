@@ -45,12 +45,12 @@ public final class SetResult extends AbstractJobEndpointTestCase {
 
         endpoint.setResult(result);
 
-        response.getData().setResult(result);
+        response.getData().setResults(result);
 
         ResponseWithResult resultFromEndpoint = mapper.readValue(mocks.getOutputStream().toString(), ResponseWithResult
                 .class);
 
-        assertEquals(resultFromEndpoint.getResult(), result);
+        assertEquals(resultFromEndpoint.getResults(), result);
 
         context.assertIsSatisfied();
     }
