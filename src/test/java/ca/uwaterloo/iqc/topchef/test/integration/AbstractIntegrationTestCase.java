@@ -3,14 +3,23 @@ package ca.uwaterloo.iqc.topchef.test.integration;
 import ca.uwaterloo.iqc.topchef.test.AbstractTestCase;
 
 /**
- * Base class for all integration tests.
+ * Base class for all integration tests. Modify the values here to change the service and job
+ * against which the integration suite is to be tested. All integration tests require that a TopChef
+ * test server is running somewhere
  */
 public abstract class AbstractIntegrationTestCase extends AbstractTestCase {
+    /**
+     * The URL to the test server
+     */
     protected static final String apiUrl = "http://localhost:5000";
 
-    protected static final String serviceId = "495d76fd-044c-4f02-8815-5ec6e7634330";
+    /**
+     * The service to test on
+     */
+    protected static final String serviceId = "8dbb916e-e389-458f-8706-f0b62947545b";
 
-    protected static final String expectedServiceName = "Testing Service";
-
-    protected static final String jobID = "42094fe4-9c71-4d6e-94fd-7ed6e2b46ce7";
+    /**
+     * The ID of the job to test on
+     */
+    protected static final String jobID = "a93f1c28-e3a5-4f74-ace4-4f85a2bc26d8";
 }

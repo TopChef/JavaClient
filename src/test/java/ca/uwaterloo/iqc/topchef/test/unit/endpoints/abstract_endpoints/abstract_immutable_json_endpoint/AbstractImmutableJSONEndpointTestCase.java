@@ -1,6 +1,7 @@
 package ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.abstract_immutable_json_endpoint;
 
 import ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.ObjectMapper;
+import ca.uwaterloo.iqc.topchef.adapters.java.net.HTTPResponseCode;
 import ca.uwaterloo.iqc.topchef.adapters.java.net.URL;
 import ca.uwaterloo.iqc.topchef.endpoints.abstract_endpoints.AbstractImmutableJSONEndpoint;
 import ca.uwaterloo.iqc.topchef.test.unit.endpoints.abstract_endpoints.AbstractEndpointsTestCase;
@@ -80,6 +81,26 @@ public abstract class AbstractImmutableJSONEndpointTestCase extends AbstractEndp
         @Override
         public ObjectMapper generate(SourceOfRandomness rng, GenerationStatus status){
             return new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper.ObjectMapper();
+        }
+    }
+
+    /**
+     * Generates random HTTP response codes
+     */
+    protected static final class HTTPResponseCodeGenerator extends Generator<HTTPResponseCode> {
+        public HTTPResponseCodeGenerator(){
+            super(HTTPResponseCode.class);
+        }
+
+        /**
+         *
+         * @param rng The random number generator provided by Quickcheck
+         * @param status THe generation status
+         * @return A random HTTP response code drawn from {@link HTTPResponseCode}
+         */
+        @Override
+        public HTTPResponseCode generate(SourceOfRandomness rng, GenerationStatus status){
+            return HTTPResponseCode.values()[rng.nextInt(0, HTTPResponseCode.values().length - 1)];
         }
     }
 }
