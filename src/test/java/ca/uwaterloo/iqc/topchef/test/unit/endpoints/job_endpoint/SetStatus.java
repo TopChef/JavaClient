@@ -20,9 +20,19 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(JUnitQuickcheck.class)
 public final class SetStatus extends AbstractJobEndpointTestCase {
+    /**
+     * The JSON mapper used to map job data to JSON
+     */
     private final ObjectMapper mapper = new ca.uwaterloo.iqc.topchef.adapters.com.fasterxml.jackson.core.wrapper
             .ObjectMapper();
 
+    /**
+     *
+     * @param response
+     * @param jobId
+     * @param newStatus
+     * @throws Exception
+     */
     @Property
     public void setStatus(
             @From(GenericResponseGenerator.class)JobEndpoint.ResponseToJobDetailsGetRequest<Object, Object> response,

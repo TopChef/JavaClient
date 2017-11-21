@@ -73,6 +73,7 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      * Check that the response code is correct
      *
      * @param connection The connection whose HTTP status code is to be checked
+     * @throws BadRequestException If the HTTP status code is 400
      * @throws MethodNotAllowedException If the HTTP status code is 405
      * @throws ResourceNotFoundException If the HTTP response code is 404
      * @throws InternalServerErrorException For HTTP status code 500
@@ -82,10 +83,12 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
      */
     protected static void assertGoodResponseCode(URLConnection connection) throws MethodNotAllowedException,
             ResourceNotFoundException, InternalServerErrorException, NoContentException, IOException,
-            UnexpectedResponseCodeException {
+            UnexpectedResponseCodeException, BadRequestException {
         HTTPResponseCode code = connection.getResponseCode();
 
         switch (code) {
+            case OK:
+                break;
             case NOT_FOUND:
                 throw new ResourceNotFoundException();
             case METHOD_NOT_ALLOWED:
@@ -94,8 +97,10 @@ public abstract class AbstractImmutableJSONEndpoint extends AbstractEndpoint imp
                 throw new InternalServerErrorException();
             case NO_CONTENT:
                 throw new NoContentException();
+            case BAD_REQUEST:
+                throw new BadRequestException();
             default:
-                break;
+                throw new UnexpectedResponseCodeException(code, connection);
         }
     }
 
