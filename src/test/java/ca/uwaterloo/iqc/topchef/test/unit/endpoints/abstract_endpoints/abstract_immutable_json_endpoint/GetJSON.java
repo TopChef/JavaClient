@@ -107,6 +107,8 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             case NO_CONTENT:
                 isErrorCode = false;
                 break;
+            default:
+                break;
         }
 
         return isErrorCode;
