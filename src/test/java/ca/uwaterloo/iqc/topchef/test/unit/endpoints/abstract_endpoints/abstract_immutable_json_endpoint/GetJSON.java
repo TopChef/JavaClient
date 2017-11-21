@@ -10,6 +10,7 @@ import ca.uwaterloo.iqc.topchef.exceptions.HTTPException;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import org.jetbrains.annotations.Contract;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assume;
@@ -84,6 +85,12 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
         context.assertIsSatisfied();
     }
 
+    /**
+     *
+     * @param code The HTTP code to check
+     * @return True if the code is an HTTP error code, otherwise False
+     */
+    @Contract(pure = true)
     private boolean isErrorCode(HTTPResponseCode code){
         boolean isErrorCode = true;
 
@@ -145,11 +152,33 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
         }
     }
 
+    /**
+     * The expected behaviour for the stubs when an error code is recieved from GetJSON
+     */
     private final class ExpectationsForBadHTTPCode extends Expectations {
+
+        /**
+         * The error code that the mock connection should return
+         */
         private final HTTPResponseCode codeToReturn;
+
+        /**
+         * The URL that will return the error code
+         */
         private final URL mockURL;
+
+        /**
+         * The connection to the erroneous URL
+         */
         private final URLConnection mockConnection;
 
+        /**
+         *
+         * @param code The error code to return
+         * @param mockURL The mock representation of the URL
+         * @param mockConnection The mock representation of the connection to the mock URL
+         * @throws Exception If the underlying method throws an exception for whatever reason
+         */
         public ExpectationsForBadHTTPCode(
                 HTTPResponseCode code,
                 URL mockURL, URLConnection mockConnection
@@ -164,6 +193,12 @@ public final class GetJSON extends AbstractImmutableJSONEndpointTestCase {
             setExpectationsForConnection();
         }
 
+        /**
+         *
+         * Set the connection up for returning the bad server response
+         *
+         * @throws Exception If the underlying methods throw an exception
+         */
         private void setExpectationsForConnection() throws Exception {
             oneOf(this.mockConnection).connect();
             oneOf(this.mockConnection).setRequestProperty("Content-Type", "application/json");
